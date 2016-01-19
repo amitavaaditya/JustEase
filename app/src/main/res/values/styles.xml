@@ -1,0 +1,42 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:windowBackground">@color/background</item>
+        <!--item name="android:toolbarStyle" tools:targetApi="lollipop">@style/ToolBarStyle</item-->
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:dialogTheme">@style/DialogTheme</item>
+        <item name="android:listViewStyle">@style/ListViewStyle</item>
+    </style>
+
+    <!-- ToolBar >
+    <style name="ToolBarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:popupTheme" tools:targetApi="lollipop">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:background">@drawable/toolbar</item>
+        <item name="actionMenuTextColor">@color/colorYellow</item>
+        <item name="android:titleTextColor" tools:targetApi="m">@color/colorWhite</item>
+        <item name="android:subtitleTextColor" tools:targetApi="m">@color/colorYellow</item>
+    </style-->
+
+    <!--Button-->
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <!--Dialog-->
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/dialog_window</item>
+    </style>
+
+    <!--ListView-->
+    <style name="ListViewStyle" parent="Widget.AppCompat.ListView">
+        <item name="android:background">@color/background</item>
+    </style>
+
+</resources>

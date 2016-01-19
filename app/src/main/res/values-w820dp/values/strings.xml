@@ -1,0 +1,75 @@
+<resources>
+    <string name="app_name">JustEase</string>
+
+    <!--MainActivity-->
+    <string name="no_internet_title">No Network Detected</string>
+    <string name="no_internet_message">This application needs an active Internet connection. Please connect before opening this app.</string>
+
+    <!--LoginFragment-->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
+    <string name="login_field_blank">Field cannot be blank</string>
+    <string name="login_failure">Failed to login. Please try again.</string>
+    <string name="invalid_login_credentials">Invalid login credentials</string>
+
+    <!--RegisterFragment-->
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="contact_number">Mobile Number</string>
+    <string name="email_id">Email ID</string>
+    <string name="set_password">Password (Atleast 8 characters)</string>
+    <string name="set_password_again">Re-enter Password</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="password_error">Length must be atleast 8 characters</string>
+    <string name="password_mismatch">Passwords do not match</string>
+
+    <string name="exit">Exit</string>
+    <string name="about_us">About Us</string>
+    <string name="my_profile">My Profile</string>
+    <string name="my_chats">My Chats</string>
+    <string name="register_failure">Failed to register. Please try again.</string>
+    <string name="login">Please login to continue…</string>
+    <string name="change_server_url">Change server URL</string>
+    <string name="url_changed">Server URL Changed successfully</string>
+    <string name="logout">Logout</string>
+
+    <string name="enquiry_title">Enquiry Title</string>
+    <string name="enquiry">Enquiry Message</string>
+    <string name="submit">Submit</string>
+    <string name="enquiry_success">Enquiry submitted successfully. An administrator will reply shortly.</string>
+    <string name="enquiry_failure">Failed to submit enquiry. Please try again.</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_edit_profile">Edit profile</string>
+    <string name="action_change_password">Change password</string>
+    <string name="save_changes">Save changes</string>
+    <string name="update_failure">Failed to update. Please try again.</string>
+    <string name="change_password_failure">Failed to change password. Please try again.</string>
+    <string name="save_password">Save Password</string>
+    <string name="old_password">Enter old password</string>
+    <string name="set_new_password">New password (Atleast 8 characters)</string>
+    <string name="set_new_password_again">Re-enter new password</string>
+    <string name="incorrect_password">Incorrect password entered</string>
+    <string name="password_change_successful">Password changed successfully</string>
+    <string name="password_change_failure">Unable to change passsword</string>
+    <string name="update_success">Updated successfully.</string>
+    <string name="enquiry_channel">Channel</string>
+    <string name="name">Name</string>
+    <string name="resend_enquiry">Resend Enquiry</string>
+    <string name="my_client">This is your client</string>
+    <string name="not_my_client">Enquiry already accepted by someone else</string>
+    <string name="accept_chat">Accept chat</string>
+    <string name="request_user_info">Request user information</string>
+    <string name="enquiry_resend_failure">Failed to resend enquiry. Please try again later.</string>
+    <string name="accept_enquiry_failure">Failed to accept enquiry. Please try again.</string>
+    <string name="enquiry_resend_success">Enquiry resent successfully.</string>
+    <string name="accept_enquiry_success">Enquiry accepted successfully.</string>
+    <string name="mobile_no">Mobile Number</string>
+    <string name="enterMessage">Enter message</string>
+    <string name="send">SEND</string>
+    <string name="sending_message">Sending Message...</string>
+    <string name="message_send_failure">Failed to send message</string>
+    <string name="open_chat">Open Chat</string>
+</resources>
