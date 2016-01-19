@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,12 +23,14 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class UserActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     //Debugging
     private static final String TAG = "HomeActivity";
 
     ViewPager viewPager;
     TabLayout tabLayout;
+    
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,18 @@ public class UserActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_home);
         setSupportActionBar((Toolbar) findViewById(R.id.toolBar));
+
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_48dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         // Setup the viewPager
         viewPager = (ViewPager) findViewById(R.id.pager);
         // Setup the Tabs
@@ -88,6 +106,22 @@ public class UserActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
         switch (item.getItemId()) {
+            case R.id.my_profile:
+                startActivity(new Intent(this, ProfileActivity.class));
+                return true;
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
+        item.setChecked(false);
+        drawerLayout.closeDrawers();
+        switch (item.getItemId()) {
             case R.id.logout:
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.logout_confirm)
@@ -112,8 +146,8 @@ public class UserActivity extends AppCompatActivity {
                 return true;
             case R.id.change_wait_time:
                 final EditText waitTimeEditText = new EditText(this);
-                waitTimeEditText.setText(Integer.toString(Constants.BACKOFF_TIME));
-                new AlertDialog.Builder(this)
+                waitTimeEditText.setText(String.format("%d", Constants.BACKOFF_TIME));
+                new AlertDialog.Builder(UserActivity.this)
                         .setMessage(getString(R.string.wait_time_changed))
                         .setView(waitTimeEditText)
                         .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {

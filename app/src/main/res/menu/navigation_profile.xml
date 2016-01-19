@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/change_server_url"
+        android:title="@string/change_server_url">
+    </item>
+
+    <item android:id="@+id/change_wait_time"
+        android:title="@string/change_wait_time">
+    </item>
+
+    <item android:id="@+id/my_home"
+        android:icon="@drawable/ic_home_white_48dp"
+        android:title="@string/my_home">
+    </item>
+
+    <item android:id="@+id/logout"
+        android:icon="@drawable/ic_power_settings_new_white_48dp"
+        android:title="@string/logout">
+    </item>
+
+    <item android:id="@+id/about_us"
+        android:title="@string/about_us">
+    </item>
+
+    <item android:id="@+id/exit"
+        android:title="@string/exit">
+    </item>
+
+</menu>

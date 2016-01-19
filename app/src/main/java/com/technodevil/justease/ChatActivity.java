@@ -1,6 +1,5 @@
 package com.technodevil.justease;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,10 +9,14 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +39,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     //Debugging
     private static final String TAG = "ChatActivity";
 
@@ -47,6 +50,8 @@ public class ChatActivity extends AppCompatActivity {
     private EditText messageEditText;
     private Button sendButton;
     private ProgressBar messageProgressBar;
+
+    DrawerLayout drawerLayout;
 
     private String message;
     private String messageDateTime;
@@ -60,6 +65,19 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         setSupportActionBar((Toolbar) findViewById(R.id.toolBar));
+
+
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_48dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
 
         Intent intent = getIntent();
         enquiryID = intent.getStringExtra(Constants.MESSAGE_ENQUIRY_ID);
@@ -88,7 +106,6 @@ public class ChatActivity extends AppCompatActivity {
                 Constants.ENQUIRY_ID + "=?", new String[]{enquiryID}, null);
         assert cursor != null;
         cursor.moveToFirst();
-        ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
             actionBar.setSubtitle("Enquiry: " + cursor.getString(cursor.getColumnIndex(Constants.ENQUIRY_TITLE)));
         cursor.close();
@@ -174,6 +191,10 @@ public class ChatActivity extends AppCompatActivity {
                 itemLayout = mInflater.inflate(R.layout.message_incoming_item, parent, false);
             else
                 itemLayout = mInflater.inflate(R.layout.message_outgoing_item, parent, false);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                itemLayout.setElevation(50);
+            }
 
             Log.d(TAG, "newView():" + cursor.getString(cursor.getColumnIndex(Constants.MESSAGE)));
             messageIDs.add(cursor.getInt(cursor.getColumnIndex(Constants.MESSAGE_ID)));
@@ -288,13 +309,28 @@ public class ChatActivity extends AppCompatActivity {
         return true;
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
         switch (item.getItemId()) {
+            case R.id.my_profile:
+                startActivity(new Intent(this, ProfileActivity.class));
+                return true;
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
+        item.setChecked(false);
+        drawerLayout.closeDrawers();
+        switch (item.getItemId()) {
             case R.id.logout:
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(ChatActivity.this)
                         .setMessage(R.string.logout_confirm)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
@@ -317,7 +353,7 @@ public class ChatActivity extends AppCompatActivity {
                 return true;
             case R.id.change_wait_time:
                 final EditText waitTimeEditText = new EditText(this);
-                waitTimeEditText.setText(Integer.toString(Constants.BACKOFF_TIME));
+                waitTimeEditText.setText(String.format("%d", Constants.BACKOFF_TIME));
                 new AlertDialog.Builder(this)
                         .setMessage(getString(R.string.wait_time_changed))
                         .setView(waitTimeEditText)
@@ -350,7 +386,7 @@ public class ChatActivity extends AppCompatActivity {
                         }).show();
                 return true;
             case R.id.about_us:
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(ChatActivity.this)
                         .setIcon(R.drawable.logo)
                         .setTitle(R.string.app_name)
                         .setMessage(R.string.about_us_message)

@@ -7,12 +7,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,11 +21,12 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //Logging
     private static final String TAG = "MainActivity";
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,19 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolBar));
+
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_48dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
         checkNetwork();
         checkPlayServices();
         checkLogin();
@@ -127,20 +142,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d(TAG, "onCreateOptionsMenu()");
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
+    public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
+        item.setChecked(false);
+        drawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.change_wait_time:
                 final EditText waitTimeEditText = new EditText(this);
-                waitTimeEditText.setText(String.format("%d",Constants.BACKOFF_TIME));
+                waitTimeEditText.setText(String.format("%d", Constants.BACKOFF_TIME));
                 new AlertDialog.Builder(this)
                         .setMessage(getString(R.string.wait_time_changed))
                         .setView(waitTimeEditText)

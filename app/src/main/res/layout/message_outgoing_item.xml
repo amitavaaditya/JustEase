@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
-    android:padding="6dip" >
+    android:padding="6dip">
 
     <TextView
         android:id="@+id/messageView"
@@ -17,7 +18,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textSize="20sp"
-        android:background="@drawable/chat_box_outgoing" />
+        android:background="@drawable/chat_box_outgoing"
+        android:elevation="5dp"
+        tools:ignore="UnusedAttribute" />
 
     <TextView
         android:id="@+id/messageDateTimeView"

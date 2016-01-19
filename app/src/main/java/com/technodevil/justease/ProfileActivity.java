@@ -10,8 +10,12 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +29,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //Debugging
     public static final String TAG = "ProfileActivity";
     private static final boolean D = true;
@@ -40,6 +44,9 @@ public class ProfileActivity extends AppCompatActivity {
     private ProgressBar updateProgressBar;
     private ProgressBar passwordChangeProgressBar;
     private Dialog dialog;
+
+    private DrawerLayout drawerLayout;
+
 
     private String firstName;
     private String lastName;
@@ -62,6 +69,17 @@ public class ProfileActivity extends AppCompatActivity {
         if(D) Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_profile);
         setSupportActionBar((Toolbar) findViewById(R.id.toolBar));
+
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_48dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -276,8 +294,28 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
         switch (item.getItemId()) {
+            case R.id.my_home:
+                if(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.USER_TYPE,"")
+                        .equals(Constants.USER))
+                    startActivity(new Intent(ProfileActivity.this, UserActivity.class));
+                else
+                    startActivity(new Intent(ProfileActivity.this, AdministratorActivity.class));
+                finish();
+                return true;
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
+        drawerLayout.closeDrawers();
+        switch (item.getItemId()) {
             case R.id.logout:
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(ProfileActivity.this)
                         .setMessage(R.string.logout_confirm)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
@@ -296,31 +334,17 @@ public class ProfileActivity extends AppCompatActivity {
                         .show();
                 return true;
             case R.id.my_home:
-                if(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.USER_TYPE,"").equals(Constants.USER))
-                    startActivity(new Intent(this, UserActivity.class));
+                if(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.USER_TYPE,"")
+                        .equals(Constants.USER))
+                    startActivity(new Intent(ProfileActivity.this, UserActivity.class));
                 else
-                    startActivity(new Intent(this, AdministratorActivity.class));
+                    startActivity(new Intent(ProfileActivity.this, AdministratorActivity.class));
                 finish();
                 return true;
-            case R.id.change_server_url:
-                final EditText serverEditText = new EditText(this);
-                serverEditText.setText(Constants.SERVER_ADDRESS);
-                new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.change_server_url))
-                        .setView(serverEditText)
-                        .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Constants.SERVER_ADDRESS = serverEditText.getText().toString();
-                                Toast.makeText(getApplicationContext(), getString(R.string.url_changed), Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                        }).show();
-                return true;
             case R.id.change_wait_time:
-                final EditText waitTimeEditText = new EditText(this);
-                waitTimeEditText.setText(Integer.toString(Constants.BACKOFF_TIME));
-                new AlertDialog.Builder(this)
+                final EditText waitTimeEditText = new EditText(ProfileActivity.this);
+                waitTimeEditText.setText(String.format("%d",Constants.BACKOFF_TIME));
+                new AlertDialog.Builder(ProfileActivity.this)
                         .setMessage(getString(R.string.wait_time_changed))
                         .setView(waitTimeEditText)
                         .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
@@ -336,8 +360,23 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         }).show();
                 return true;
+            case R.id.change_server_url:
+                final EditText serverEditText = new EditText(ProfileActivity.this);
+                serverEditText.setText(Constants.SERVER_ADDRESS);
+                new AlertDialog.Builder(ProfileActivity.this)
+                        .setMessage(getString(R.string.change_server_url))
+                        .setView(serverEditText)
+                        .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Constants.SERVER_ADDRESS = serverEditText.getText().toString();
+                                Toast.makeText(getApplicationContext(), getString(R.string.url_changed), Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }).show();
+                return true;
             case R.id.about_us:
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(ProfileActivity.this)
                         .setIcon(R.drawable.logo)
                         .setTitle(R.string.app_name)
                         .setMessage(R.string.about_us_message)

@@ -82,7 +82,7 @@
     <string name="delete_message">Delete message?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
-    <string name="my_home">HOME</string>
+    <string name="my_home">Home</string>
     <string name="logout_confirm">Are you sure you want to logout?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
