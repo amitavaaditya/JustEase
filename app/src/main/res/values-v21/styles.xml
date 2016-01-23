@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Button-->
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:fontFamily">roboto-medium</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+</resources>

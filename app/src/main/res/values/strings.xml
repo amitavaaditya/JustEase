@@ -8,6 +8,7 @@
     <!--LoginFragment-->
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="login_required">Please login to continue…</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="login_field_blank">Field cannot be blank</string>
@@ -24,23 +25,27 @@
     <string name="action_sign_up">Sign up</string>
     <string name="password_error">Length must be atleast 8 characters</string>
     <string name="password_mismatch">Passwords do not match</string>
+    <string name="register_failure">Failed to register. Please try again.</string>
+    <string name="username_exists">Failed to register. Username exists.</string>
+    <string name="not_valid_email">Not a valid email address</string>
 
+    <!--Menu Items and messages-->
     <string name="exit">Exit</string>
     <string name="about_us">About Us</string>
     <string name="my_profile">My Profile</string>
-    <string name="my_chats">My Chats</string>
-    <string name="register_failure">Failed to register. Please try again.</string>
-    <string name="login">Please login to continue…</string>
+    <string name="my_home">Home</string>
     <string name="change_server_url">Change server URL</string>
-    <string name="url_changed">Server URL Changed successfully</string>
+    <string name="change_wait_time">Set wait time (in milliseconds)</string>
+    <string name="wait_time_changed">Wait time changed successfully</string>
     <string name="logout">Logout</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="url_changed">Server URL Changed successfully</string>
+    <string name="about_us_message">An app for legal support. Launch your enquiry and one of our administrators will return to you as soon as possible. All our administrators are certified advocates and we assure you the best support possible.</string>
 
-    <string name="enquiry_title">Enquiry Title</string>
-    <string name="enquiry">Enquiry Message</string>
-    <string name="submit">Submit</string>
-    <string name="enquiry_success">Enquiry submitted successfully. An administrator will reply shortly.</string>
-    <string name="enquiry_failure">Failed to submit enquiry. Please try again.</string>
 
+    <!--ProfileActivity-->
     <string name="action_edit_profile">Edit profile</string>
     <string name="action_change_password">Change password</string>
     <string name="save_changes">Save changes</string>
@@ -54,6 +59,19 @@
     <string name="password_change_successful">Password changed successfully</string>
     <string name="password_change_failure">Unable to change password</string>
     <string name="update_success">Updated successfully.</string>
+
+    <string name="my_chats">My Chats</string>
+
+    <!--EnquiryDialogFragment-->
+    <string name="enquiry_title">Enquiry Title</string>
+    <string name="enquiry">Enquiry Message</string>
+    <string name="submit">Submit</string>
+    <string name="enquiry_success">Enquiry submitted successfully. An administrator will reply shortly.</string>
+    <string name="enquiry_failure">Failed to submit enquiry. Please try again.</string>
+    <string name="select_channel">Select channel</string>
+    <string name="channel_not_selected">Please select a channel first</string>
+
+    <!--EnquiriesFragment-->
     <string name="enquiry_channel">Channel</string>
     <string name="name">Name</string>
     <string name="resend_enquiry">Resend Enquiry</string>
@@ -67,23 +85,27 @@
     <string name="accept_enquiry_success">Enquiry accepted successfully.</string>
     <string name="mobile_no">Mobile Number</string>
     <string name="enterMessage">Enter message</string>
-    <string name="send">SEND</string>
+    <string name="open_chat">Open Chat</string>
+    <string name="enquiry_updated">Enquiry Updated</string>
+
+    <!--ChatActivity-->
+    <string name="send">Send</string>
     <string name="sending_message">Sending Message…</string>
     <string name="message_send_failure">Failed to send message</string>
-    <string name="open_chat">Open Chat</string>
-    <string name="about_us_message">An app for legal support. Launch your enquiry and one of our administrators will return to you as soon as possible. All our administrators are certified advocates and we assure you the best support possible.</string>
-    <string name="username_exists">Failed to register. Username exists.</string>
-    <string name="not_valid_email">Not a valid email address</string>
-    <string name="enquiry_updated">Enquiry Updated</string>
-    <string name="new_enquiry">New Enquiry</string>
-    <string name="enquiry_accepted">Enquiry Accepted</string>
-    <string name="change_wait_time">Set wait time (in milliseconds)</string>
-    <string name="wait_time_changed">Wait time changed successfully</string>
     <string name="delete_message">Delete message?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
-    <string name="my_home">Home</string>
-    <string name="logout_confirm">Are you sure you want to logout?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+
+    <!--MyGcmListenerService-->
+    <string name="new_enquiry">New Enquiry</string>
+    <string name="enquiry_accepted">Enquiry Accepted</string>
+    <string name="blank_enquiry_title">Enquiry title cannot be blank</string>
+    <string name="blank_enquiry">Enquiry cannot be blank</string>
+
+    <!--Subtitles/Tab titles-->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="my_enquiries">My Enquiries</string>
+    <string name="enquiries">Enquiries</string>
+    <string name="my_cases">My Cases</string>
 </resources>

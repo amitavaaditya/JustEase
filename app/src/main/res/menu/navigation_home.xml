@@ -2,9 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
         <item android:id="@+id/change_server_url"
+            android:icon="@drawable/ic_edit_white_48dp"
             android:title="@string/change_server_url" />
 
         <item android:id="@+id/change_wait_time"
+            android:icon="@drawable/ic_edit_white_48dp"
             android:title="@string/change_wait_time" />
 
         <item android:id="@+id/my_profile"

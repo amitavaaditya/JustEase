@@ -15,12 +15,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -40,7 +41,7 @@
         </receiver>
 
         <service
-            android:name=".MyGcmListenerService"
+            android:name=".service.MyGcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -48,7 +49,7 @@
         </service>
 
         <service
-            android:name=".MyInstanceIDListenerService"
+            android:name=".service.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
@@ -56,18 +57,22 @@
         </service>
 
         <service
-            android:name=".ServerIntentService"
+            android:name=".service.ServerIntentService"
             android:exported="false" />
 
         <provider
-            android:name=".DataProvider"
+            android:name=".database.DataProvider"
             android:authorities="com.technodevil.justease.provider"
             android:exported="false" />
 
-        <activity android:name=".UserActivity" />
-        <activity android:name=".AdministratorActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ChatActivity" />
+        <activity android:name=".ui.UserActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".ui.AdministratorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".ui.ProfileActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name=".ui.ChatActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
 
 </manifest>

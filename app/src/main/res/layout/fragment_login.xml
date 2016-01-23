@@ -6,83 +6,74 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="130dp"
+            android:background="@drawable/logo_large"
+            android:contentDescription="@string/app_name"
+            android:elevation="20dp"
+            tools:ignore="UnusedAttribute" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/usernameLayout"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_vertical_margin">
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/login_margin"
+            android:layout_marginRight="@dimen/login_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:hint="@string/username">
 
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="130dp"
-                android:background="@drawable/logo"
-                android:contentDescription="@string/app_name"
-                android:elevation="20dp"
-                tools:ignore="UnusedAttribute" />
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/usernameLayout"
-                android:layout_height="wrap_content"
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_marginLeft="@dimen/login_margin"
-                android:layout_marginRight="@dimen/login_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:hint="@string/username">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textAutoComplete"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/passwordLayout"
                 android:layout_height="wrap_content"
+                android:inputType="textAutoComplete"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/passwordLayout"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/login_margin"
+            android:layout_marginRight="@dimen/login_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:hint="@string/password">
+
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_marginLeft="@dimen/login_margin"
-                android:layout_marginRight="@dimen/login_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="@string/password">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <Button
-                android:id="@+id/signInButton"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/action_sign_in"
-                android:background="@drawable/button_selector"/>
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"/>
 
-            <Button
-                android:id="@+id/registerButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/action_register"
-                android:background="@drawable/button_selector"
-                android:layout_marginTop="5dp"/>
+        </android.support.design.widget.TextInputLayout>
 
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/loginProgressBar"
-                android:visibility="gone"/>
+        <Button
+            android:id="@+id/signInButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/action_sign_in"/>
 
-        </LinearLayout>
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/action_register"
+            android:layout_marginTop="5dp"/>
 
-    </ScrollView>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loginProgressBar"
+            android:visibility="gone"/>
 
-
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

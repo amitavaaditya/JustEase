@@ -15,17 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/toolbar"
-            android:elevation="20dp"
-            android:title="@string/app_name"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            tools:ignore="UnusedAttribute">
-        </android.support.v7.widget.Toolbar>
+        <include layout="@layout/toolbar" />
 
         <FrameLayout
             android:id="@+id/frame"

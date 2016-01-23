@@ -3,4 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="login_margin">32dp</dimen>
+
+    <!--Buttons-->
+    <dimen name="button_height">36dp</dimen>
+    <dimen name="button_padding">16dp</dimen>
 </resources>
