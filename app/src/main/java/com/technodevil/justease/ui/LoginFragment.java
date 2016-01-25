@@ -36,7 +36,6 @@ import com.technodevil.justease.util.OnFragmentChangedListener;
 public class LoginFragment extends Fragment {
     //Debugging
     public static final String TAG = "LoginFragment";
-    private static final boolean D = true;
 
     //UI elements
     private CoordinatorLayout coordinatorLayout;
@@ -56,7 +55,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (D) Log.d(TAG, "onAttach()");
+        if (Constants.D) Log.d(TAG, "onAttach()");
         try {
             onFragmentChangedListener = (OnFragmentChangedListener) getActivity();
         } catch (ClassCastException e) {
@@ -67,20 +66,20 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (D) Log.d(TAG, "onCreate()");
+        if (Constants.D) Log.d(TAG, "onCreate()");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (D) Log.d(TAG,"onCreateView()");
+        if (Constants.D) Log.d(TAG,"onCreateView()");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if (D) Log.d(TAG,"onViewCreated()");
+        if (Constants.D) Log.d(TAG,"onViewCreated()");
         //Initialise UI elements
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);
         usernameLayout = (TextInputLayout)view.findViewById(R.id.usernameLayout);
@@ -93,7 +92,7 @@ public class LoginFragment extends Fragment {
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onClick(View v) {
-                if (D) Log.d(TAG, "Button clicked: signInButton");
+                if (Constants.D) Log.d(TAG, "Button clicked: signInButton");
 
                 username = usernameLayout.getEditText().getText().toString();
                 if (username.equals("")) {
@@ -116,7 +115,7 @@ public class LoginFragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (D) Log.d(TAG, "Button clicked: registerButton");
+                if (Constants.D) Log.d(TAG, "Button clicked: registerButton");
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame, new RegisterFragment())
                         .addToBackStack(null)
@@ -128,7 +127,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        if (D) Log.d(TAG, "onResume()");
+        if (Constants.D) Log.d(TAG, "onResume()");
         onFragmentChangedListener.onFragmentChanged(getResources().getString(R.string.login));
         Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.login_required, Snackbar.LENGTH_INDEFINITE);
         View view = snackbar.getView();
@@ -145,15 +144,15 @@ public class LoginFragment extends Fragment {
     @Override
     public void onPause(){
         super.onResume();
-        if (D) Log.d(TAG, "onPause()");
+        if (Constants.D) Log.d(TAG, "onPause()");
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(loginBroadcastReceiver);
-        if (D) Log.i(TAG, "Login BroadcastReceiver unregistered");
+        if (Constants.D) Log.i(TAG, "Login BroadcastReceiver unregistered");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (D) Log.d(TAG, "onDestroy()");
+        if (Constants.D) Log.d(TAG, "onDestroy()");
         if(loginTask != null) loginTask.cancel(false);
     }
 
@@ -178,12 +177,12 @@ public class LoginFragment extends Fragment {
 
             LocalBroadcastManager.getInstance(getActivity())
                     .registerReceiver(loginBroadcastReceiver, new IntentFilter(Constants.LOGIN_STATUS));
-            if (D) Log.i(TAG, "Login BroadcastReceiver registered");
+            if (Constants.D) Log.i(TAG, "Login BroadcastReceiver registered");
 
             try {
                 Thread.sleep(Constants.BACKOFF_TIME);
             } catch (InterruptedException e) {
-                if (D) Log.e(TAG,e.getClass().toString());
+                if (Constants.D) Log.e(TAG,e.getClass().toString());
             }
             return null;
         }
@@ -195,7 +194,7 @@ public class LoginFragment extends Fragment {
             registerButton.setVisibility(View.VISIBLE);
             loginProgressBar.setVisibility(View.GONE);
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(loginBroadcastReceiver);
-            if (D) Log.i(TAG, "Login BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Login BroadcastReceiver unregistered");
             Toast.makeText(getActivity(), R.string.login_failure, Toast.LENGTH_SHORT).show();
         }
     }
@@ -204,7 +203,7 @@ public class LoginFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String status = intent.getStringExtra(Constants.LOGIN_STATUS);
-            if (D) Log.d(TAG, "onReceive():" + status);
+            if (Constants.D) Log.d(TAG, "onReceive():" + status);
             if(status.equals(Constants.LOGIN_SUCCESS)) {
                 Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
                 editor.putString(Constants.USERNAME, username);
@@ -229,7 +228,7 @@ public class LoginFragment extends Fragment {
             }
             if(loginTask != null) loginTask.cancel(false);
             LocalBroadcastManager.getInstance(context).unregisterReceiver(loginBroadcastReceiver);
-            if (D) Log.i(TAG, "Login BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Login BroadcastReceiver unregistered");
         }
     };
 }

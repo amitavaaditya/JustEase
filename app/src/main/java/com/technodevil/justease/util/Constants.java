@@ -20,6 +20,8 @@ import android.net.Uri;
 
 public class Constants {
 
+    public static final boolean D = true;
+
     public static final String CONFIRM = "confirm";
 
     public static final String STATUS = "status";
@@ -96,7 +98,7 @@ public class Constants {
     public static final int ADMINISTRATOR_FRAGMENT_ENQUIRIES = 0;
     public static final int ADMINISTRATOR_FRAGMENT_CHAT_LIST = 1;
 
-    public static String SERVER_ADDRESS = "http://192.168.0.102/justease/";
+    public static String SERVER_ADDRESS = "http://justease.netai.net/justease/";
 
     public static final Uri CONTENT_URI_MESSAGES = Uri.parse("content://com.technodevil.justease.provider/messages");
     public static final Uri CONTENT_URI_ENQUIRIES = Uri.parse("content://com.technodevil.justease.provider/enquiries");

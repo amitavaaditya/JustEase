@@ -9,7 +9,6 @@ import com.technodevil.justease.util.Constants;
 public class MyInstanceIDListenerService extends InstanceIDListenerService {
 
     private static final String TAG = "MyInstanceIDLS";
-    private static final boolean D = true;
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -18,7 +17,7 @@ public class MyInstanceIDListenerService extends InstanceIDListenerService {
      */
     @Override
     public void onTokenRefresh() {
-        if (D) Log.i(TAG,"onTokenRefresh()");
+        if (Constants.D) Log.i(TAG,"onTokenRefresh()");
         // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
         Intent intent = new Intent(this, ServerIntentService.class);
         intent.setAction(Constants.ACTION_TOKEN_REFRESH);

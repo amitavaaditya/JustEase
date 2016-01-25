@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         OnFragmentChangedListener {
     //Logging
     private static final String TAG = "MainActivity";
-    private static final boolean D = true;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (D) Log.d(TAG, "onCreate()");setContentView(R.layout.activity_main);
+        if (Constants.D) Log.d(TAG, "onCreate()");setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         toolbarSubtitleView = (TextView) toolbar.findViewById(R.id.toolbarSubtitleView);
@@ -62,37 +61,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStart() {
         super.onStart();
-        if (D) Log.d(TAG, "onStart()");
+        if (Constants.D) Log.d(TAG, "onStart()");
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (D) Log.d(TAG, "onRestoreInstanceState()");
+        if (Constants.D) Log.d(TAG, "onRestoreInstanceState()");
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        if (D) Log.d(TAG, "onResume()");
+        if (Constants.D) Log.d(TAG, "onResume()");
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        if (D) Log.d(TAG, "onPause()");
+        if (Constants.D) Log.d(TAG, "onPause()");
     }
 
     /*
      * Check if Internet is enabled. Otherwise exit.
      */
     private void checkNetwork() {
-        if (D) Log.d(TAG, "checkNetwork()");
+        if (Constants.D) Log.d(TAG, "checkNetwork()");
         ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext()
                 .getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         if(activeNetworkInfo == null || !activeNetworkInfo.isConnected()) {
-            if (D) Log.d(TAG, "Not Connected");
+            if (Constants.D) Log.d(TAG, "Not Connected");
             new AlertDialog.Builder(this)
                     .setTitle(R.string.no_internet_title)
                     .setMessage(R.string.no_internet_message)
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     })
                     .show();
         } else {
-            if (D) Log.d(TAG, "Connected");
+            if (Constants.D) Log.d(TAG, "Connected");
             checkPlayServices();
         }
     }
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Check if user is already logged in
      */
     private void checkLogin() {
-        if (D) Log.d(TAG, "checkLogin()");
+        if (Constants.D) Log.d(TAG, "checkLogin()");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String username = sharedPreferences.getString(Constants.USERNAME, "");
         if(!username.equals("")) {
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
                         .show();
             } else {
-                if (D) Log.i(TAG, "This device is not supported.");
+                if (Constants.D) Log.i(TAG, "This device is not supported.");
                 finish();
             }
         }
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        if (D) Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
+        if (Constants.D) Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
         item.setChecked(false);
         drawerLayout.closeDrawers();
         switch (item.getItemId()) {
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 try {
                                     Constants.BACKOFF_TIME = Integer.parseInt(waitTimeEditText.getText().toString());
                                 } catch (Exception e) {
-                                    if (D) Log.e(TAG, e.toString());
+                                    if (Constants.D) Log.e(TAG, e.toString());
                                 }
                                 Toast.makeText(getApplicationContext(), getString(R.string.wait_time_changed), Toast.LENGTH_SHORT)
                                         .show();
@@ -207,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (D) Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
+        if (Constants.D) Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (D) Log.d(TAG, "onBackPressed()");
+        if (Constants.D) Log.d(TAG, "onBackPressed()");
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else {
@@ -240,18 +239,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        if (D) Log.d(TAG, "onSaveInstanceState()");
+        if (Constants.D) Log.d(TAG, "onSaveInstanceState()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (D) Log.d(TAG,"onDestroy()");
+        if (Constants.D) Log.d(TAG,"onDestroy()");
     }
 
     @Override
     public void onFragmentChanged(String subtitle) {
-        if (D) Log.d(TAG,"onFragmentChanged():" + subtitle);
+        if (Constants.D) Log.d(TAG,"onFragmentChanged():" + subtitle);
         toolbarSubtitleView.setText(subtitle);
     }
 }

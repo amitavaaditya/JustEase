@@ -26,7 +26,6 @@ import com.technodevil.justease.ui.UserActivity;
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
-    private static final boolean D = true;
 
     /**
      * Called when message is received.
@@ -40,9 +39,9 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
-        if (D) Log.d(TAG, "From: " + from);
-        if (D) Log.d(TAG, "Message: " + message);
-        if (D) Log.d(TAG, "Status: " + data.getString(Constants.STATUS));
+        if (Constants.D) Log.d(TAG, "From: " + from);
+        if (Constants.D) Log.d(TAG, "Message: " + message);
+        if (Constants.D) Log.d(TAG, "Status: " + data.getString(Constants.STATUS));
 
         Intent intent;
         assert message != null;
@@ -64,7 +63,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 if(data.getString(Constants.STATUS).equals(Constants.SUCCESS)) {
                     intent.putExtra(Constants.LOGIN_STATUS, Constants.LOGIN_SUCCESS);
                     intent.putExtra(Constants.DATA, data);
-                    if (D) Log.d(TAG, "Type: " + data.getString(Constants.USER_TYPE));
+                    if (Constants.D) Log.d(TAG, "Type: " + data.getString(Constants.USER_TYPE));
                 }
                 else
                     intent.putExtra(Constants.LOGIN_STATUS, Constants.LOGIN_FAILURE);
@@ -101,7 +100,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 else {
                     if (data.getString(Constants.STATUS).equals(Constants.SUCCESS)) {
                         intent.putExtra(Constants.ENQUIRY_STATUS, Constants.ENQUIRY_SUCCESS);
-                        if (D) Log.i("enquiry_id", data.getString(Constants.ENQUIRY_ID));
+                        if (Constants.D) Log.i("enquiry_id", data.getString(Constants.ENQUIRY_ID));
                     }
                     else
                         intent.putExtra(Constants.ENQUIRY_STATUS, Constants.ENQUIRY_FAILURE);
@@ -158,7 +157,7 @@ public class MyGcmListenerService extends GcmListenerService {
         contentValues.put(Constants.MESSAGE, message);
         contentValues.put(Constants.MESSAGE_DATE_TIME, messageDateTime);
         contentValues.put(Constants.MESSAGE_DIRECTION, messageDirection);
-        if (D) Log.d(TAG, "saveNewMessage():" + messageDirection);
+        if (Constants.D) Log.d(TAG, "saveNewMessage():" + messageDirection);
         getApplicationContext().getContentResolver().insert(Constants.CONTENT_URI_MESSAGES, contentValues);
 
         if(!ChatActivity.running) {
@@ -185,9 +184,9 @@ public class MyGcmListenerService extends GcmListenerService {
 
     @SuppressWarnings("ConstantConditions")
     private void saveNewEnquiry(Bundle data) {
-        if (D) Log.d(TAG, "new message");
+        if (Constants.D) Log.d(TAG, "new message");
         ContentValues values = new ContentValues();
-        if (D) Log.i("enquiry_id:", data.getString(Constants.ENQUIRY_ID));
+        if (Constants.D) Log.i("enquiry_id:", data.getString(Constants.ENQUIRY_ID));
         values.put(Constants.ENQUIRY_ID, Integer.parseInt(data.getString(Constants.ENQUIRY_ID)));
         values.put(Constants.ENQUIRY_CHANNEL, data.getString(Constants.ENQUIRY_CHANNEL));
         values.put(Constants.ENQUIRY_TITLE, data.getString(Constants.ENQUIRY_TITLE));
@@ -202,11 +201,11 @@ public class MyGcmListenerService extends GcmListenerService {
     }
 
     private void updateEnquiry(Bundle data) {
-        if (D) Log.d(TAG, "update enquiry");
+        if (Constants.D) Log.d(TAG, "update enquiry");
         ContentValues values = new ContentValues();
         String enquiryID = data.getString(Constants.ENQUIRY_ID);
         String newEnquiryID = data.getString(Constants.NEW_ENQUIRY_ID);
-        if (D) Log.i("enquiry_id:", newEnquiryID);
+        if (Constants.D) Log.i("enquiry_id:", newEnquiryID);
         values.put(Constants.ENQUIRY_ID, newEnquiryID);
         values.put(Constants.ENQUIRY_DATE_TIME, data.getString(Constants.ENQUIRY_DATE_TIME));
         getApplicationContext().getContentResolver().update(Uri.withAppendedPath(Constants.CONTENT_URI_ENQUIRIES, enquiryID),
@@ -218,9 +217,9 @@ public class MyGcmListenerService extends GcmListenerService {
     }
 
     private void acceptedEnquiry(Bundle data) {
-        if (D) Log.d(TAG, "accept enquiry");
+        if (Constants.D) Log.d(TAG, "accept enquiry");
         ContentValues values = new ContentValues();
-        if (D) Log.i("enquiry_id:", data.getString(Constants.ENQUIRY_ID));
+        if (Constants.D) Log.i("enquiry_id:", data.getString(Constants.ENQUIRY_ID));
         String enquiryID = data.getString(Constants.ENQUIRY_ID);
         values.put(Constants.ENQUIRY_ACCEPTED, Constants.ACCEPTED);
         getApplicationContext().getContentResolver().update(Uri.withAppendedPath(Constants.CONTENT_URI_ENQUIRIES, enquiryID),
@@ -241,7 +240,7 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param intent Which activity to start and data needed
      */
     private void sendNotification(Intent intent) {
-        if (D) Log.d(TAG, "sendNotification()");
+        if (Constants.D) Log.d(TAG, "sendNotification()");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 

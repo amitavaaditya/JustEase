@@ -40,7 +40,6 @@ public class ServerIntentService extends IntentService {
 
     private static final String TAG = "ServerIntentService";
 
-
     public ServerIntentService() {
         super(TAG);
     }
@@ -52,7 +51,7 @@ public class ServerIntentService extends IntentService {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String action = intent.getAction();
         Bundle data = intent.getBundleExtra(Constants.DATA);
-        Log.d(TAG, "onHandleIntent():" + action);
+        if (Constants.D) Log.d(TAG, "onHandleIntent():" + action);
         switch (action) {
             case Constants.ACTION_LOGIN:
                 login(data);
@@ -88,9 +87,9 @@ public class ServerIntentService extends IntentService {
     }
 
     private void login(Bundle data) {
-        Log.d(TAG, "login()");
+        if (Constants.D) Log.d(TAG, "login()");
         String serverURL = Constants.SERVER_ADDRESS + "login.php";
-        Log.i(TAG, "login():" + serverURL);
+        if (Constants.D) Log.i(TAG, "login():" + serverURL);
         String token = registerGCM();
         if(token != null) {
             sharedPreferences.edit().putString(Constants.REGISTRATION_KEY, token).apply();
@@ -100,7 +99,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void register(Bundle data) {
-        Log.d(TAG, "register():");
+        if (Constants.D) Log.d(TAG, "register():");
         String serverURL = Constants.SERVER_ADDRESS + "register.php";
         String token = registerGCM();
         if(token != null) {
@@ -111,7 +110,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void update(Bundle data) {
-        Log.d(TAG, "update():");
+        if (Constants.D) Log.d(TAG, "update():");
         String serverURL = Constants.SERVER_ADDRESS + "update.php";
         String token = sharedPreferences.getString(Constants.REGISTRATION_KEY,null);
         if(token != null) {
@@ -121,7 +120,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void updateToken() {
-        Log.d(TAG, "updateToken()");
+        if (Constants.D) Log.d(TAG, "updateToken()");
         String token = registerGCM();
         String savedToken = sharedPreferences.getString(Constants.REGISTRATION_KEY, "");
         if(token!= null && !token.equals(savedToken)) {
@@ -134,7 +133,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void sendMessage(Bundle data) {
-        Log.d(TAG, "sendMessage():");
+        if (Constants.D) Log.d(TAG, "sendMessage():");
         String serverURL = Constants.SERVER_ADDRESS + "sendmessage.php";
         String token = sharedPreferences.getString(Constants.REGISTRATION_KEY,null);
         if(token != null) {
@@ -144,7 +143,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void updatePassword(Bundle data) {
-        Log.d(TAG, "updatePassword():");
+        if (Constants.D) Log.d(TAG, "updatePassword():");
         String serverURL = Constants.SERVER_ADDRESS + "updatepassword.php";
         String token = sharedPreferences.getString(Constants.REGISTRATION_KEY, null);
         if(token != null) {
@@ -155,7 +154,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void submitEnquiry(Bundle data) {
-        Log.d(TAG, "submitEnquiry():" + data);
+        if (Constants.D) Log.d(TAG, "submitEnquiry():" + data);
         String serverURL = Constants.SERVER_ADDRESS + "enquiry.php";
         String token = sharedPreferences.getString(Constants.REGISTRATION_KEY, null);
         if(token != null) {
@@ -165,7 +164,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void resendEnquiry(Bundle data) {
-        Log.d(TAG, "resendEnquiry():" + data);
+        if (Constants.D) Log.d(TAG, "resendEnquiry():" + data);
         String serverURL = Constants.SERVER_ADDRESS + "resendenquiry.php";
         String token = sharedPreferences.getString(Constants.REGISTRATION_KEY,null);
         if(token != null) {
@@ -175,7 +174,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void acceptEnquiry(Bundle data) {
-        Log.d(TAG, "acceptEnquiry():" + data);
+        if (Constants.D) Log.d(TAG, "acceptEnquiry():" + data);
         String serverURL = Constants.SERVER_ADDRESS + "acceptenquiry.php";
         String token = sharedPreferences.getString(Constants.REGISTRATION_KEY,null);
         if(token != null) {
@@ -185,7 +184,7 @@ public class ServerIntentService extends IntentService {
     }
 
     private void requestUserInfo(Bundle data) {
-        Log.d(TAG, "requestUserInfo():" + data);
+        if (Constants.D) Log.d(TAG, "requestUserInfo():" + data);
         String serverURL = Constants.SERVER_ADDRESS + "requestuserinfo.php";
         String token = sharedPreferences.getString(Constants.REGISTRATION_KEY,null);
         if(token != null) {
@@ -200,11 +199,11 @@ public class ServerIntentService extends IntentService {
             InstanceID instanceID = InstanceID.getInstance(this);
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            Log.i(TAG, "GCM Registration Token: " + token);
+            if (Constants.D) Log.i(TAG, "GCM Registration Token: " + token);
             return token;
         } catch (IOException ex) {
-            Log.e(TAG, "Failed to get token");
-            Log.e(TAG, ex.getClass().toString());
+            if (Constants.D) Log.e(TAG, "Failed to get token");
+            if (Constants.D) Log.e(TAG, ex.getClass().toString());
         }
         return null;
     }
@@ -215,14 +214,14 @@ public class ServerIntentService extends IntentService {
             postData += (key + "=" + data.getString(key) + '&');
         }
         postData = postData.substring(0,postData.length() - 1);
-        Log.i(TAG,"sendToServer():" + postData);
+        if (Constants.D) Log.i(TAG,"sendToServer():" + postData);
         byte[] bytes = postData.getBytes();
 
         URL url = null;
         try {
             url = new URL(serverURL);
         } catch (MalformedURLException e) {
-            Log.e(TAG,e.toString());
+            if (Constants.D) Log.e(TAG,e.toString());
         }
 
         HttpURLConnection connection = null;
@@ -238,7 +237,7 @@ public class ServerIntentService extends IntentService {
             outputStream.flush();
             // handle the response
             int status = connection.getResponseCode();
-            Log.d(TAG, "Status:" + Integer.toString(status));
+            if (Constants.D) Log.d(TAG, "Status:" + Integer.toString(status));
             // If response is not success
             if (status != 200) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
@@ -247,11 +246,11 @@ public class ServerIntentService extends IntentService {
                 while ((line=reader.readLine()) != null) {
                     response+=line;
                 }
-                Log.e(TAG,response);
+                if (Constants.D) Log.e(TAG,response);
                 throw new IOException("Post failed with error code " + status);
             }
         } catch (Exception e) {
-            Log.e(TAG,e.toString());
+            if (Constants.D) Log.e(TAG,e.toString());
         } finally {
             if(connection != null)
                 connection.disconnect();

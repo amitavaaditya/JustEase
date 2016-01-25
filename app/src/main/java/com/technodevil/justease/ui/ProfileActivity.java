@@ -37,7 +37,7 @@ import com.technodevil.justease.util.Constants;
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //Debugging
     public static final String TAG = "ProfileActivity";
-    private static final boolean D = true;
+    
     //UI elements
     private TextInputLayout firstNameLayout;
     private TextInputLayout lastNameLayout;
@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(D) Log.d(TAG, "onCreate()");
+        if(Constants.D) Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
@@ -112,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onClick(View v) {
-                if (D) Log.d(TAG, "register()");
+                if (Constants.D) Log.d(TAG, "register()");
                 if (!editing) {
                     editing = true;
                     firstNameLayout.getEditText().setEnabled(true);
@@ -185,13 +185,13 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     @Override
     public void onResume() {
         super.onResume();
-        if(D) Log.d(TAG, "onViewCreated()");
+        if(Constants.D) Log.d(TAG, "onViewCreated()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if(D) Log.d(TAG, "onPause()");
+        if(Constants.D) Log.d(TAG, "onPause()");
         LocalBroadcastManager.getInstance(this)
                 .unregisterReceiver(updateBroadcastReceiver);
         Log.i(TAG, "Update BroadcastReceiver unregistered");

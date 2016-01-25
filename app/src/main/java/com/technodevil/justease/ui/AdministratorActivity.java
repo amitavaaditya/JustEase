@@ -34,14 +34,13 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
 
     //Debugging
     private static final String TAG = "AdministratorActivity";
-    private static final boolean D = true;
 
     private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (D) Log.d(TAG, "onCreate()");
+        if (Constants.D) Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_administrator);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
@@ -78,30 +77,30 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
     @Override
     public void onStart() {
         super.onStart();
-        if (D) Log.d(TAG, "onStart()");
+        if (Constants.D) Log.d(TAG, "onStart()");
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (D) Log.d(TAG, "onRestoreInstanceState()");
+        if (Constants.D) Log.d(TAG, "onRestoreInstanceState()");
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        if (D) Log.d(TAG, "onResume()");
+        if (Constants.D) Log.d(TAG, "onResume()");
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        if (D) Log.d(TAG, "onPause()");
+        if (Constants.D) Log.d(TAG, "onPause()");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (D) Log.d(TAG, "onCreateOptionsMenu()");
+        if (Constants.D) Log.d(TAG, "onCreateOptionsMenu()");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.home, menu);
         return true;
@@ -109,7 +108,7 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (D) Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
+        if (Constants.D) Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
         switch (item.getItemId()) {
             case R.id.my_profile:
                 startActivity(new Intent(this, ProfileActivity.class));
@@ -123,7 +122,7 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        if (D) Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
+        if (Constants.D) Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
         drawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.logout:
@@ -160,7 +159,7 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
                                 try {
                                     Constants.BACKOFF_TIME = Integer.parseInt(waitTimeEditText.getText().toString());
                                 } catch (Exception e) {
-                                    if (D) Log.e(TAG, e.toString());
+                                    if (Constants.D) Log.e(TAG, e.toString());
                                 }
                                 Toast.makeText(getApplicationContext(), getString(R.string.wait_time_changed), Toast.LENGTH_SHORT)
                                         .show();
@@ -198,7 +197,7 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
 
     @Override
     public void onBackPressed() {
-        if (D) Log.d(TAG, "onBackPressed()");
+        if (Constants.D) Log.d(TAG, "onBackPressed()");
         new AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to exit?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -216,13 +215,13 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        if (D) Log.d(TAG, "onSaveInstanceState()");
+        if (Constants.D) Log.d(TAG, "onSaveInstanceState()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (D) Log.d(TAG, "onDestroy()");
+        if (Constants.D) Log.d(TAG, "onDestroy()");
     }
 
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
@@ -233,7 +232,7 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
 
         @Override
         public android.support.v4.app.Fragment getItem(int pos) {
-            if (D) Log.d(TAG, "getItem():" + pos);
+            if (Constants.D) Log.d(TAG, "getItem():" + pos);
             switch(pos) {
                 case Constants.ADMINISTRATOR_FRAGMENT_ENQUIRIES: return new EnquiriesFragment();
                 case Constants.ADMINISTRATOR_FRAGMENT_CHAT_LIST: return new MyCasesFragment();
@@ -255,6 +254,6 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
 
     @Override
     public void onFragmentChanged(String subtitle) {
-        if (D) Log.d(TAG,"onFragmentChanged():" + subtitle);
+        if (Constants.D) Log.d(TAG,"onFragmentChanged():" + subtitle);
     }
 }

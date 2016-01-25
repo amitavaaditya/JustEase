@@ -27,7 +27,6 @@ import com.technodevil.justease.util.OnFragmentChangedListener;
 public class MyCasesFragment extends ListFragment {
     //Debugging
     private static final String TAG = "MyCasesFragment";
-    private static final boolean D = true;
 
     public static MyCasesCursorAdapter myCasesCursorAdapter;
 
@@ -36,7 +35,7 @@ public class MyCasesFragment extends ListFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (D) Log.d(TAG, "onAttach()");
+        if (Constants.D) Log.d(TAG, "onAttach()");
         try {
             onFragmentChangedListener = (OnFragmentChangedListener) getActivity();
         } catch (ClassCastException e) {
@@ -47,14 +46,14 @@ public class MyCasesFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (D) Log.d(TAG, "onCreate()");
+        if (Constants.D) Log.d(TAG, "onCreate()");
         setRetainInstance(true);
         onFragmentChangedListener.onFragmentChanged(getResources().getString(R.string.my_cases));
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if (D) Log.d(TAG, "onViewCreated()");
+        if (Constants.D) Log.d(TAG, "onViewCreated()");
         // Adapter to display menu
         myCasesCursorAdapter = new MyCasesCursorAdapter(getActivity(),null);
         setListAdapter(myCasesCursorAdapter);
@@ -70,7 +69,7 @@ public class MyCasesFragment extends ListFragment {
     @Override
     public void onResume(){
         super.onResume();
-        if (D) Log.d(TAG, "onResume()");
+        if (Constants.D) Log.d(TAG, "onResume()");
         MyLoaderCallBacks myLoaderCallBacks = new MyLoaderCallBacks(getActivity());
         getActivity().getSupportLoaderManager().initLoader(0, null, myLoaderCallBacks);
     }
@@ -78,7 +77,7 @@ public class MyCasesFragment extends ListFragment {
     @Override
     public void onPause(){
         super.onResume();
-        if (D) Log.d(TAG, "onPause()");
+        if (Constants.D) Log.d(TAG, "onPause()");
     }
 
     private static class ViewHolder {
@@ -119,14 +118,14 @@ public class MyCasesFragment extends ListFragment {
             int newMessages = cursor.getInt(cursor.getColumnIndex(Constants.ENQUIRY_NEW_MESSAGE_COUNT));
             holder.enquiryNewMessageCountView.setText(newMessages + " new messages");
             holder.enquiryDateTimeView.setText(cursor.getString(cursor.getColumnIndex(Constants.ENQUIRY_DATE_TIME)));
-            if (D) Log.i(TAG,"adding:" + cursor.getInt(cursor.getColumnIndex(Constants.ENQUIRY_ID)));
+            if (Constants.D) Log.i(TAG,"adding:" + cursor.getInt(cursor.getColumnIndex(Constants.ENQUIRY_ID)));
         }
     }
 
     @Override
     public void onListItemClick(ListView l, View v, final int position, long id) {
         super.onListItemClick(l, v, position, id);
-        if (D) Log.d(TAG, "onListItemClick():" + position);
+        if (Constants.D) Log.d(TAG, "onListItemClick():" + position);
         Cursor clickedPosition = getActivity().getContentResolver().query(Constants.CONTENT_URI_ENQUIRIES,
                 new String[]{Constants.ENQUIRY_ID, Constants.ENQUIRY_ACCEPTED},
                 Constants.ENQUIRY_ACCEPTED + "=?",
@@ -137,7 +136,7 @@ public class MyCasesFragment extends ListFragment {
             clickedPosition.moveToNext();
         String clickedEnquiryID = Integer.toString(clickedPosition
                 .getInt(clickedPosition.getColumnIndex(Constants.ENQUIRY_ID)));
-        if (D) Log.d(TAG, "clickedEnquiryID:" + clickedEnquiryID);
+        if (Constants.D) Log.d(TAG, "clickedEnquiryID:" + clickedEnquiryID);
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra(Constants.MESSAGE_ENQUIRY_ID, clickedEnquiryID);
         startActivity(intent);

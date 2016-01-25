@@ -57,7 +57,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (D) Log.d(TAG, "onAttach()");
+        if (Constants.D) Log.d(TAG, "onAttach()");
         try {
             onFragmentChangedListener = (OnFragmentChangedListener) getActivity();
         } catch (ClassCastException e) {
@@ -68,7 +68,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (D) Log.d(TAG, "onCreate()");
+        if (Constants.D) Log.d(TAG, "onCreate()");
         setRetainInstance(true);
         onFragmentChangedListener.onFragmentChanged(getResources().getString(R.string.register));
     }
@@ -76,14 +76,14 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(D) Log.d(TAG, "onCreateView()");
+        if(Constants.D) Log.d(TAG, "onCreateView()");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if(D) Log.d(TAG,"onViewCreated()");
+        if(Constants.D) Log.d(TAG,"onViewCreated()");
         //Initialise UI elements
         firstNameLayout = (TextInputLayout)view.findViewById(R.id.firstNameLayout);
         lastNameLayout = (TextInputLayout)view.findViewById(R.id.lastNameLayout);
@@ -98,7 +98,7 @@ public class RegisterFragment extends Fragment {
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onClick(View v) {
-                if (D) Log.d(TAG, "register()");
+                if (Constants.D) Log.d(TAG, "register()");
                 firstName = firstNameLayout.getEditText().getText().toString();
                 lastName = lastNameLayout.getEditText().getText().toString();
                 mobileNo = contactNumberLayout.getEditText().getText().toString();
@@ -144,13 +144,13 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(D) Log.d(TAG, "onResume()");
+        if(Constants.D) Log.d(TAG, "onResume()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (D) Log.d(TAG, "onPause()");
+        if (Constants.D) Log.d(TAG, "onPause()");
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(registerBroadcastReceiver);
         Log.i(TAG, "Register BroadcastReceiver unregistered");

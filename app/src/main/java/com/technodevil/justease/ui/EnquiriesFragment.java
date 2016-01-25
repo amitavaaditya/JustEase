@@ -43,7 +43,6 @@ import java.util.Calendar;
 public class EnquiriesFragment extends ListFragment {
     //Debugging
     private static final String TAG = "EnquiriesFragment";
-    private static final boolean D = true;
 
     private String userType;
     public static EnquiryCursorAdapter enquiryCursorAdapter;
@@ -72,7 +71,7 @@ public class EnquiriesFragment extends ListFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (D) Log.d(TAG, "onAttach()");
+        if (Constants.D) Log.d(TAG, "onAttach()");
         try {
             onFragmentChangedListener = (OnFragmentChangedListener) getActivity();
         } catch (ClassCastException e) {
@@ -83,7 +82,7 @@ public class EnquiriesFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (D) Log.d(TAG, "onCreate()");
+        if (Constants.D) Log.d(TAG, "onCreate()");
         setRetainInstance(true);
         userType = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.USER_TYPE,"");
         if (userType.equals(Constants.USER))
@@ -92,7 +91,7 @@ public class EnquiriesFragment extends ListFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if (D) Log.d(TAG, "onViewCreated()");
+        if (Constants.D) Log.d(TAG, "onViewCreated()");
         // Adapter to display menu
         enquiryCursorAdapter = new EnquiryCursorAdapter(getActivity(),null);
         setListAdapter(enquiryCursorAdapter);
@@ -108,7 +107,7 @@ public class EnquiriesFragment extends ListFragment {
     @Override
     public void onResume(){
         super.onResume();
-        if (D) Log.d(TAG, "onResume()");
+        if (Constants.D) Log.d(TAG, "onResume()");
         MyLoaderCallBacks myLoaderCallBacks = new MyLoaderCallBacks(getActivity());
         getActivity().getSupportLoaderManager().initLoader(1, null, myLoaderCallBacks);
     }
@@ -116,7 +115,7 @@ public class EnquiriesFragment extends ListFragment {
     @Override
     public void onPause(){
         super.onResume();
-        if (D) Log.d(TAG, "onPause()");
+        if (Constants.D) Log.d(TAG, "onPause()");
     }
 
     private static class ViewHolder {
@@ -163,14 +162,14 @@ public class EnquiriesFragment extends ListFragment {
                 holder.enquiryStatusView.setText(cursor.getString(cursor.getColumnIndex(Constants.ENQUIRY_ACCEPTED)));
             }
             holder.enquiryDateTimeView.setText(cursor.getString(cursor.getColumnIndex(Constants.ENQUIRY_DATE_TIME)));
-            if (D) Log.i(TAG,"adding:" + cursor.getInt(cursor.getColumnIndex(Constants.ENQUIRY_ID)));
+            if (Constants.D) Log.i(TAG,"adding:" + cursor.getInt(cursor.getColumnIndex(Constants.ENQUIRY_ID)));
         }
     }
 
     @Override
     public void onListItemClick(ListView l, View v, final int position, long id) {
         super.onListItemClick(l, v, position, id);
-        if (D) Log.d(TAG, "onListItemClick():" + position);
+        if (Constants.D) Log.d(TAG, "onListItemClick():" + position);
         clickedPosition = getActivity().getContentResolver().query(Constants.CONTENT_URI_ENQUIRIES,
                 new String[]{Constants.ENQUIRY_ID, Constants.ENQUIRY_CHANNEL, Constants.ENQUIRY_TITLE,
                         Constants.ENQUIRY, Constants.ENQUIRY_ACCEPTED},
@@ -179,7 +178,7 @@ public class EnquiriesFragment extends ListFragment {
         for(int i = 0; i <= position; i++)
             clickedPosition.moveToNext();
         clickedEnquiryID = clickedPosition.getInt(clickedPosition.getColumnIndex(Constants.ENQUIRY_ID));
-        if (D) Log.d(TAG, "clickedEnquiryID:" + clickedEnquiryID);
+        if (Constants.D) Log.d(TAG, "clickedEnquiryID:" + clickedEnquiryID);
 
         if(userType.equals(Constants.USER) &&
             clickedPosition.getString(clickedPosition.getColumnIndex(Constants.ENQUIRY_ACCEPTED)).equals(Constants.ACCEPTED)) {
@@ -227,7 +226,7 @@ public class EnquiriesFragment extends ListFragment {
             } else {
                 if (!accepted.equals(Constants.PENDING)) {
                     if(accepted.equals(Constants.MY_CLIENT)) {
-                        if (D) Log.i(TAG, "here");
+                        if (Constants.D) Log.i(TAG, "here");
                         button.setTextColor(Color.BLACK);
                         button.setText(R.string.my_client);
                         button.setEnabled(false);
@@ -237,7 +236,7 @@ public class EnquiriesFragment extends ListFragment {
                         openChatButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (D) Log.i(TAG, "onClick():");
+                                if (Constants.D) Log.i(TAG, "onClick():");
                                 dismiss();
                                 clickedPosition.close();
                                 //open chat
@@ -309,12 +308,12 @@ public class EnquiriesFragment extends ListFragment {
 
             LocalBroadcastManager.getInstance(getActivity())
                     .registerReceiver(resendEnquiryBroadcastReceiver, new IntentFilter(Constants.ENQUIRY_RESEND_STATUS));
-            if (D) Log.i(TAG, "Resend Enquiry BroadcastReceiver registered");
+            if (Constants.D) Log.i(TAG, "Resend Enquiry BroadcastReceiver registered");
 
             try {
                 Thread.sleep(Constants.BACKOFF_TIME);
             } catch (InterruptedException e) {
-                if (D) Log.e(TAG,e.getClass().toString());
+                if (Constants.D) Log.e(TAG,e.getClass().toString());
             }
             return null;
         }
@@ -325,7 +324,7 @@ public class EnquiriesFragment extends ListFragment {
             progressBar.setVisibility(View.GONE);
             LocalBroadcastManager.getInstance(getActivity())
                     .unregisterReceiver(resendEnquiryBroadcastReceiver);
-            if (D) Log.i(TAG, "Resend Enquiry BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Resend Enquiry BroadcastReceiver unregistered");
             Toast.makeText(getActivity(), R.string.enquiry_resend_failure, Toast.LENGTH_SHORT)
                     .show();
         }
@@ -353,12 +352,12 @@ public class EnquiriesFragment extends ListFragment {
 
             LocalBroadcastManager.getInstance(getActivity())
                     .registerReceiver(acceptEnquiryBroadcastReceiver, new IntentFilter(Constants.ACCEPT_ENQUIRY_STATUS));
-            if (D) Log.i(TAG, "Accept Enquiry BroadcastReceiver registered");
+            if (Constants.D) Log.i(TAG, "Accept Enquiry BroadcastReceiver registered");
 
             try {
                 Thread.sleep(Constants.BACKOFF_TIME);
             } catch (InterruptedException e) {
-                if (D) Log.e(TAG,e.getClass().toString());
+                if (Constants.D) Log.e(TAG,e.getClass().toString());
             }
             return null;
         }
@@ -370,7 +369,7 @@ public class EnquiriesFragment extends ListFragment {
             progressBar.setVisibility(View.GONE);
             LocalBroadcastManager.getInstance(getActivity())
                     .unregisterReceiver(acceptEnquiryBroadcastReceiver);
-            if (D) Log.i(TAG, "Accept Enquiry BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Accept Enquiry BroadcastReceiver unregistered");
             Toast.makeText(getActivity(), R.string.accept_enquiry_failure, Toast.LENGTH_SHORT)
                     .show();
         }
@@ -396,12 +395,12 @@ public class EnquiriesFragment extends ListFragment {
 
             LocalBroadcastManager.getInstance(getActivity())
                     .registerReceiver(requestUserInfoBroadcastReceiver, new IntentFilter(Constants.REQUEST_USER_INFO_STATUS));
-            if (D) Log.i(TAG, "Request User Info BroadcastReceiver registered");
+            if (Constants.D) Log.i(TAG, "Request User Info BroadcastReceiver registered");
 
             try {
                 Thread.sleep(Constants.BACKOFF_TIME);
             } catch (InterruptedException e) {
-                if (D) Log.e(TAG,e.getClass().toString());
+                if (Constants.D) Log.e(TAG,e.getClass().toString());
             }
             return null;
         }
@@ -413,7 +412,7 @@ public class EnquiriesFragment extends ListFragment {
             progressBar.setVisibility(View.GONE);
             LocalBroadcastManager.getInstance(getActivity())
                     .unregisterReceiver(requestUserInfoBroadcastReceiver);
-            if (D) Log.i(TAG, "Request User Info BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Request User Info BroadcastReceiver unregistered");
             Toast.makeText(getActivity(), R.string.enquiry_resend_failure, Toast.LENGTH_SHORT)
                     .show();
         }
@@ -422,13 +421,13 @@ public class EnquiriesFragment extends ListFragment {
     BroadcastReceiver resendEnquiryBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context getActivity, Intent intent) {
-            if (D) Log.d(TAG, "onReceive()");
+            if (Constants.D) Log.d(TAG, "onReceive()");
             if(resendTask != null) resendTask.cancel(false);
             String status = intent.getStringExtra(Constants.ENQUIRY_RESEND_STATUS);
             if(status.equals(Constants.ENQUIRY_RESEND_SUCCESS)) {
                 //Insert into DB
                 newEnquiryID = Integer.parseInt(intent.getStringExtra(Constants.NEW_ENQUIRY_ID));
-                        if (D) Log.d(TAG, "enquiryID:" + Integer.toString(newEnquiryID));
+                        if (Constants.D) Log.d(TAG, "enquiryID:" + Integer.toString(newEnquiryID));
                 Toast.makeText(getActivity, R.string.enquiry_resend_success,Toast.LENGTH_SHORT).show();
                 enquiryInfoDialog.dismiss();
                 updateEnquiry();
@@ -440,7 +439,7 @@ public class EnquiriesFragment extends ListFragment {
             }
             LocalBroadcastManager.getInstance(getActivity)
                     .unregisterReceiver(resendEnquiryBroadcastReceiver);
-            if (D) Log.i(TAG, "Resend Enquiry BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Resend Enquiry BroadcastReceiver unregistered");
         }
     };
 
@@ -457,7 +456,7 @@ public class EnquiriesFragment extends ListFragment {
     BroadcastReceiver acceptEnquiryBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context getActivity, Intent intent) {
-            if (D) Log.d(TAG, "onReceive()");
+            if (Constants.D) Log.d(TAG, "onReceive()");
             if(acceptEnquiryTask != null) acceptEnquiryTask.cancel(false);
             String status = intent.getStringExtra(Constants.ACCEPT_ENQUIRY_STATUS);
             if(status.equals(Constants.ACCEPT_ENQUIRY_SUCCESS)) {
@@ -476,7 +475,7 @@ public class EnquiriesFragment extends ListFragment {
             }
             LocalBroadcastManager.getInstance(getActivity)
                     .unregisterReceiver(acceptEnquiryBroadcastReceiver);
-            if (D) Log.i(TAG, "Accept Enquiry BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Accept Enquiry BroadcastReceiver unregistered");
         }
     };
 
@@ -487,7 +486,7 @@ public class EnquiriesFragment extends ListFragment {
     BroadcastReceiver requestUserInfoBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context getActivity, Intent intent) {
-            if (D) Log.d(TAG, "onReceive()");
+            if (Constants.D) Log.d(TAG, "onReceive()");
             if(requestUserInfoTask != null) requestUserInfoTask.cancel(false);
             String status = intent.getStringExtra(Constants.REQUEST_USER_INFO_STATUS);
             if(status.equals(Constants.REQUEST_USER_INFO_SUCCESS)) {
@@ -510,7 +509,7 @@ public class EnquiriesFragment extends ListFragment {
             }
             LocalBroadcastManager.getInstance(getActivity)
                     .unregisterReceiver(requestUserInfoBroadcastReceiver);
-            if (D) Log.i(TAG, "Request User Info BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Request User Info BroadcastReceiver unregistered");
         }
     };
 }

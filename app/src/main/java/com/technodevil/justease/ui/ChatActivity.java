@@ -123,7 +123,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Log.e(TAG, "onItemLongClick():" + position);
+                                if (Constants.D) Log.e(TAG, "onItemLongClick():" + position);
                                 getContentResolver().delete(Constants.CONTENT_URI_MESSAGES,
                                         Constants.MESSAGE_ID + "=?",
                                         new String[]{Integer.toString(messageIDs.get(messageIDs.size()-1-position))});
@@ -141,7 +141,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume(){
         super.onResume();
-        Log.d(TAG, "onResume()");
+        if (Constants.D) Log.d(TAG, "onResume()");
         MyLoaderCallBacks myLoaderCallBacks = new MyLoaderCallBacks(this);
         getSupportLoaderManager().initLoader(2, null, myLoaderCallBacks);
         ContentValues contentValues = new ContentValues();
@@ -154,7 +154,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPause(){
         super.onPause();
-        Log.d(TAG, "onPause()");
+        if (Constants.D) Log.d(TAG, "onPause()");
         running = false;
     }
 
@@ -191,7 +191,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             View itemLayout;
-            Log.d(TAG, "newView():" + getItemViewType(cursor.getPosition()));
+            if (Constants.D) Log.d(TAG, "newView():" + getItemViewType(cursor.getPosition()));
             if(getItemViewType(cursor.getPosition()) == 0)
                 itemLayout = mInflater.inflate(R.layout.message_incoming_item, parent, false);
             else
@@ -201,7 +201,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
                 itemLayout.setElevation(50);
             }
 
-            Log.d(TAG, "newView():" + cursor.getString(cursor.getColumnIndex(Constants.MESSAGE)));
+            if (Constants.D) Log.d(TAG, "newView():" + cursor.getString(cursor.getColumnIndex(Constants.MESSAGE)));
             messageIDs.add(cursor.getInt(cursor.getColumnIndex(Constants.MESSAGE_ID)));
 
             ViewHolder holder = new ViewHolder();
@@ -216,8 +216,8 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
             ViewHolder holder = (ViewHolder) view.getTag();
             holder.messageView.setText(cursor.getString(cursor.getColumnIndex(Constants.MESSAGE)));
             holder.messageDateTimeView.setText(cursor.getString(cursor.getColumnIndex(Constants.MESSAGE_DATE_TIME)));
-            Log.i(TAG, "adding:" + cursor.getInt(cursor.getColumnIndex(Constants.ENQUIRY_ID)));
-            Log.i(TAG, "array:" + messageIDs);
+            if (Constants.D) Log.i(TAG, "adding:" + cursor.getInt(cursor.getColumnIndex(Constants.ENQUIRY_ID)));
+            if (Constants.D) Log.i(TAG, "array:" + messageIDs);
         }
     }
 
@@ -255,12 +255,12 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
 
             LocalBroadcastManager.getInstance(ChatActivity.this)
                     .registerReceiver(messageBroadcastReceiver, new IntentFilter(Constants.SEND_MESSAGE_STATUS));
-            Log.i(TAG, "Message BroadcastReceiver registered");
+            if (Constants.D) Log.i(TAG, "Message BroadcastReceiver registered");
 
             try {
                 Thread.sleep(Constants.BACKOFF_TIME);
             } catch (InterruptedException e) {
-                Log.e(TAG,e.getClass().toString());
+                if (Constants.D) Log.e(TAG,e.getClass().toString());
             }
             return null;
         }
@@ -271,7 +271,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
             messageProgressBar.setVisibility(View.GONE);
             LocalBroadcastManager.getInstance(ChatActivity.this)
                     .unregisterReceiver(messageBroadcastReceiver);
-            Log.i(TAG, "Message BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Message BroadcastReceiver unregistered");
             Toast.makeText(ChatActivity.this, R.string.message_send_failure, Toast.LENGTH_SHORT)
                     .show();
         }
@@ -280,7 +280,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     BroadcastReceiver messageBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onReceive()");
+            if (Constants.D) Log.d(TAG, "onReceive()");
             if(sendMessageTask != null) sendMessageTask.cancel(false);
             String status = intent.getStringExtra(Constants.SEND_MESSAGE_STATUS);
             if(status.equals(Constants.SEND_MESSAGE_SUCCESS)) {
@@ -302,13 +302,13 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
             }
             LocalBroadcastManager.getInstance(context)
                     .unregisterReceiver(messageBroadcastReceiver);
-            Log.i(TAG, "Message BroadcastReceiver unregistered");
+            if (Constants.D) Log.i(TAG, "Message BroadcastReceiver unregistered");
         }
     };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        if (Constants.D) Log.d(TAG, "onCreateOptionsMenu()");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.home, menu);
         return true;
@@ -316,7 +316,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
+        if (Constants.D) Log.d(TAG, "onOptionsItemSelected():" + item.getTitle());
         switch (item.getItemId()) {
             case R.id.my_profile:
                 startActivity(new Intent(this, ProfileActivity.class));
@@ -330,7 +330,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
+        if (Constants.D) Log.d(TAG, "onNavigationItemSelected():" + item.getTitle());
         item.setChecked(false);
         drawerLayout.closeDrawers();
         switch (item.getItemId()) {
@@ -368,7 +368,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
                                 try {
                                     Constants.BACKOFF_TIME = Integer.parseInt(waitTimeEditText.getText().toString());
                                 } catch (Exception e) {
-                                    Log.e(TAG, e.toString());
+                                    if (Constants.D) Log.e(TAG, e.toString());
                                 }
                                 Toast.makeText(getApplicationContext(), getString(R.string.wait_time_changed), Toast.LENGTH_SHORT)
                                         .show();

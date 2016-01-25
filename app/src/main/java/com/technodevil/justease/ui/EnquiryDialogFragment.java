@@ -40,7 +40,6 @@ import java.util.Calendar;
 public class EnquiryDialogFragment extends DialogFragment {
     //Debugging
     public static final String TAG = "EnquiryDialogFragment";
-    private static final boolean D = true;
 
     //List items
     String[] items ={
@@ -65,7 +64,7 @@ public class EnquiryDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(D) Log.d(TAG,"onCreate()");
+        if(Constants.D) Log.d(TAG,"onCreate()");
         setRetainInstance(true);
     }
 
@@ -88,7 +87,7 @@ public class EnquiryDialogFragment extends DialogFragment {
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        if(D) Log.d(TAG, "onViewCreated()");
+        if(Constants.D) Log.d(TAG, "onViewCreated()");
 
         Spinner channelSpinner = (Spinner) view.findViewById(R.id.channelSpinner);
         channelSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item,
@@ -140,13 +139,13 @@ public class EnquiryDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(D) Log.d(TAG, "onResume()");
+        if(Constants.D) Log.d(TAG, "onResume()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if(D) Log.d(TAG, "onPause()");
+        if(Constants.D) Log.d(TAG, "onPause()");
         if(enquiryTask != null) enquiryTask.cancel(false);
 
         LocalBroadcastManager.getInstance(getActivity())
@@ -156,7 +155,7 @@ public class EnquiryDialogFragment extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        if(D) Log.d(TAG, "onDestroyView()");
+        if(Constants.D) Log.d(TAG, "onDestroyView()");
         if (getDialog() != null && getRetainInstance()) {
             getDialog().setDismissMessage(null);
         }
