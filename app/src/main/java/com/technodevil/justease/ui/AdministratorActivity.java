@@ -21,9 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.technodevil.justease.R;
 import com.technodevil.justease.util.Constants;
@@ -146,40 +144,6 @@ public class AdministratorActivity extends AppCompatActivity implements Navigati
                 return true;
             case R.id.my_profile:
                 startActivity(new Intent(this, ProfileActivity.class));
-                return true;
-            case R.id.change_wait_time:
-                final EditText waitTimeEditText = new EditText(AdministratorActivity.this);
-                waitTimeEditText.setText(String.format("%d",Constants.BACKOFF_TIME));
-                new AlertDialog.Builder(AdministratorActivity.this)
-                        .setMessage(getString(R.string.wait_time_changed))
-                        .setView(waitTimeEditText)
-                        .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    Constants.BACKOFF_TIME = Integer.parseInt(waitTimeEditText.getText().toString());
-                                } catch (Exception e) {
-                                    if (Constants.D) Log.e(TAG, e.toString());
-                                }
-                                Toast.makeText(getApplicationContext(), getString(R.string.wait_time_changed), Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                        }).show();
-                return true;
-            case R.id.change_server_url:
-                final EditText serverEditText = new EditText(this);
-                serverEditText.setText(Constants.SERVER_ADDRESS);
-                new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.change_server_url))
-                        .setView(serverEditText)
-                        .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Constants.SERVER_ADDRESS = serverEditText.getText().toString();
-                                Toast.makeText(getApplicationContext(), getString(R.string.url_changed), Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                        }).show();
                 return true;
             case R.id.about_us:
                 new AlertDialog.Builder(this)

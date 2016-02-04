@@ -32,9 +32,7 @@ public class MyGcmListenerService extends GcmListenerService {
      *
      * @param from SenderID of the sender.
      * @param data Data bundle containing message data as key/value pairs.
-     *             For Set of keys use data.keySet().
      */
-    // [START receive_message]
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onMessageReceived(String from, Bundle data) {
@@ -67,6 +65,15 @@ public class MyGcmListenerService extends GcmListenerService {
                 }
                 else
                     intent.putExtra(Constants.LOGIN_STATUS, Constants.LOGIN_FAILURE);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                break;
+            case Constants.ACTION_FORGOT_PASSWORD:
+                intent = new Intent(Constants.FORGOT_PASSWORD_STATUS);
+                if(data.getString(Constants.STATUS).equals(Constants.SUCCESS)) {
+                    intent.putExtra(Constants.FORGOT_PASSWORD_STATUS, Constants.FORGOT_PASSWORD_SUCCESS);
+                }
+                else
+                    intent.putExtra(Constants.FORGOT_PASSWORD_STATUS, Constants.FORGOT_PASSWORD_FAILURE);
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 break;
             case Constants.ACTION_REGISTER:
@@ -125,7 +132,7 @@ public class MyGcmListenerService extends GcmListenerService {
             case Constants.ACTION_ACCEPT_ENQUIRY:
                 intent = new Intent(Constants.ACCEPT_ENQUIRY_STATUS);
                 if (data.getString(Constants.STATUS).equals(Constants.NEW)){
-                    acceptedEnquiry(data);
+                    acceptEnquiry(data);
                 }else {
                     if (data.getString(Constants.STATUS).equals(Constants.SUCCESS))
                         intent.putExtra(Constants.ACCEPT_ENQUIRY_STATUS, Constants.ACCEPT_ENQUIRY_SUCCESS);
@@ -147,6 +154,11 @@ public class MyGcmListenerService extends GcmListenerService {
         }
     }
 
+    /**
+     * Save new message to database
+     *
+     * @param data Bundle containing message details
+     */
     private void saveNewMessage(Bundle data) {
         String enquiryID = data.getString(Constants.MESSAGE_ENQUIRY_ID);
         String message = data.getString(Constants.MESSAGE);
@@ -182,6 +194,11 @@ public class MyGcmListenerService extends GcmListenerService {
         }
     }
 
+    /**
+     * Save new enquiry to database
+     *
+     * @param data Bundle containing enquiry data
+     */
     @SuppressWarnings("ConstantConditions")
     private void saveNewEnquiry(Bundle data) {
         if (Constants.D) Log.d(TAG, "new message");
@@ -200,6 +217,11 @@ public class MyGcmListenerService extends GcmListenerService {
         sendNotification(intent);
     }
 
+    /**
+     * Update enquiry to new enquiryID and enquiryDateTime
+     *
+     * @param data Bundle containing updated data
+     */
     private void updateEnquiry(Bundle data) {
         if (Constants.D) Log.d(TAG, "update enquiry");
         ContentValues values = new ContentValues();
@@ -216,7 +238,12 @@ public class MyGcmListenerService extends GcmListenerService {
         sendNotification(intent);
     }
 
-    private void acceptedEnquiry(Bundle data) {
+    /**
+     * Called when another administrator accepts enquiry
+     *
+     * @param data Bundle containing data of accepted enquiry
+     */
+    private void acceptEnquiry(Bundle data) {
         if (Constants.D) Log.d(TAG, "accept enquiry");
         ContentValues values = new ContentValues();
         if (Constants.D) Log.i("enquiry_id:", data.getString(Constants.ENQUIRY_ID));

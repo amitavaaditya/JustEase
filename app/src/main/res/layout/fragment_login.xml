@@ -74,6 +74,13 @@
             android:id="@+id/loginProgressBar"
             android:visibility="gone"/>
 
+        <TextView
+            android:id="@+id/forgotPasswordView"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password" />
+
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 package com.technodevil.justease.ui;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +46,17 @@ public class LoginFragment extends Fragment {
     private Button signInButton;
     private Button registerButton;
     private ProgressBar loginProgressBar;
+    private TextInputLayout forgotEmailLayout;
+    private Button requestPasswordButton;
+    private ProgressBar forgotPasswordProgressBar;
+
+    private Dialog forgotPasswordDialog;
 
     String username;
     String password;
 
     LoginTask loginTask;
+    RequestPasswordTask requestPasswordTask;
 
     OnFragmentChangedListener onFragmentChangedListener;
 
@@ -80,6 +88,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         if (Constants.D) Log.d(TAG,"onViewCreated()");
+
         //Initialise UI elements
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);
         usernameLayout = (TextInputLayout)view.findViewById(R.id.usernameLayout);
@@ -112,6 +121,7 @@ public class LoginFragment extends Fragment {
                 loginTask.execute();
             }
         });
+
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +130,37 @@ public class LoginFragment extends Fragment {
                         .replace(R.id.frame, new RegisterFragment())
                         .addToBackStack(null)
                         .commit();
+            }
+        });
+
+        TextView forgotPasswordView = (TextView) view.findViewById(R.id.forgotPasswordView);
+        forgotPasswordView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotPasswordDialog = new Dialog(getActivity());
+                forgotPasswordDialog.setContentView(R.layout.dialog_forgot_password);
+                forgotPasswordDialog.setTitle(R.string.enter_username);
+                forgotEmailLayout = (TextInputLayout) forgotPasswordDialog.findViewById(R.id.forgotEmailLayout);
+                forgotPasswordProgressBar = (ProgressBar) forgotPasswordDialog.findViewById(R.id.requestPasswordProgressBar);
+                requestPasswordButton = (Button) forgotPasswordDialog.findViewById(R.id.requestPasswordButton);
+                if (requestPasswordButton == null)
+                    Log.d(TAG, "fuck of");
+                requestPasswordButton.setOnClickListener(new View.OnClickListener() {
+                    @SuppressWarnings("ConstantConditions")
+                    @Override
+                    public void onClick(View v) {
+                        usernameLayout.setErrorEnabled(false);
+                        username = forgotEmailLayout.getEditText().getText().toString();
+                        if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+                            usernameLayout.setErrorEnabled(true);
+                            usernameLayout.setError(getString(R.string.not_valid_email));
+                        } else {
+                            requestPasswordTask = new RequestPasswordTask();
+                            requestPasswordTask.execute();
+                        }
+                    }
+                });
+                forgotPasswordDialog.show();
             }
         });
     }
@@ -142,18 +183,28 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onResume();
         if (Constants.D) Log.d(TAG, "onPause()");
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(loginBroadcastReceiver);
         if (Constants.D) Log.i(TAG, "Login BroadcastReceiver unregistered");
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(forgotPasswordBroadcastReceiver);
+        if (Constants.D) Log.i(TAG, "Forgot Password BroadcastReceiver unregistered");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Constants.D) Log.d(TAG, "onStop()");
+        if(loginTask != null) loginTask.cancel(false);
+        if(requestPasswordTask != null) requestPasswordTask.cancel(false);
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (Constants.D) Log.d(TAG, "onDestroy()");
-        if(loginTask != null) loginTask.cancel(false);
     }
 
     class LoginTask extends AsyncTask<Void,Void,Void> {
@@ -199,6 +250,45 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    class RequestPasswordTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute() {
+            requestPasswordButton.setVisibility(View.GONE);
+            forgotPasswordProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.USERNAME, username);
+
+            Intent intent = new Intent(getActivity(), ServerIntentService.class);
+            intent.setAction(Constants.ACTION_FORGOT_PASSWORD);
+            intent.putExtra(Constants.DATA, bundle);
+            getActivity().startService(intent);
+
+            LocalBroadcastManager.getInstance(getActivity())
+                    .registerReceiver(forgotPasswordBroadcastReceiver, new IntentFilter(Constants.FORGOT_PASSWORD_STATUS));
+            if (Constants.D) Log.i(TAG, "Forgot Password BroadcastReceiver registered");
+
+            try {
+                Thread.sleep(Constants.BACKOFF_TIME);
+            } catch (InterruptedException e) {
+                if (Constants.D) Log.e(TAG,e.getClass().toString());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            requestPasswordButton.setVisibility(View.VISIBLE);
+            forgotPasswordProgressBar.setVisibility(View.GONE);
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(forgotPasswordBroadcastReceiver);
+            if (Constants.D) Log.i(TAG, "Forgot Password BroadcastReceiver unregistered");
+            Toast.makeText(getActivity(), R.string.request_password_failure, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     BroadcastReceiver loginBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -229,6 +319,33 @@ public class LoginFragment extends Fragment {
             if(loginTask != null) loginTask.cancel(false);
             LocalBroadcastManager.getInstance(context).unregisterReceiver(loginBroadcastReceiver);
             if (Constants.D) Log.i(TAG, "Login BroadcastReceiver unregistered");
+        }
+    };
+
+    BroadcastReceiver forgotPasswordBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String status = intent.getStringExtra(Constants.FORGOT_PASSWORD_STATUS);
+            if (Constants.D) Log.d(TAG, "onReceive():" + status);
+            forgotPasswordDialog.dismiss();
+            Snackbar snackbar;
+            if(status.equals(Constants.FORGOT_PASSWORD_SUCCESS)) {
+                snackbar = Snackbar.make(coordinatorLayout, getString(R.string.password_sent) + username, Snackbar.LENGTH_SHORT);
+            } else {
+                snackbar = Snackbar.make(coordinatorLayout, R.string.username_not_exists, Snackbar.LENGTH_SHORT);
+            }
+            View view = snackbar.getView();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark, getActivity().getTheme()));
+            } else {
+                //noinspection deprecation
+                view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+            ((TextView) view.findViewById(android.support.design.R.id.snackbar_text)).setTextColor(Color.WHITE);
+            snackbar.show();
+            if(requestPasswordTask != null) requestPasswordTask.cancel(false);
+            LocalBroadcastManager.getInstance(context).unregisterReceiver(forgotPasswordBroadcastReceiver);
+            if (Constants.D) Log.i(TAG, "Forgot Password BroadcastReceiver unregistered");
         }
     };
 }

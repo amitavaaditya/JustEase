@@ -25,7 +25,8 @@
             android:paddingRight="5dp"
             android:paddingEnd="5dp"
             android:stackFromBottom="true"
-            android:transcriptMode="alwaysScroll"/>
+            android:transcriptMode="alwaysScroll"
+            android:background="@color/background"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,12 +39,17 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:inputType="textMultiLine"
+                android:background="@color/very_light_grey"
+                android:layout_margin="5dp"
+                android:padding="5dp"
                 android:hint="@string/enterMessage"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/sendButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                android:src="@drawable/send_button_selector"
                 android:text="@string/send"/>
 
             <ProgressBar

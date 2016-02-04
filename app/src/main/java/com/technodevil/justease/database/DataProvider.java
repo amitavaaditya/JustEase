@@ -17,7 +17,6 @@ import com.technodevil.justease.util.Constants;
 /**
  * Class to handle SQLite database interactions and activities
  */
-@SuppressWarnings("ConstantConditions")
 public class DataProvider extends ContentProvider{
 
     private DbHelper dbHelper;
@@ -38,6 +37,7 @@ public class DataProvider extends ContentProvider{
         return true;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -74,6 +74,7 @@ public class DataProvider extends ContentProvider{
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -97,6 +98,7 @@ public class DataProvider extends ContentProvider{
         return insertUri;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -127,6 +129,7 @@ public class DataProvider extends ContentProvider{
         return count;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();

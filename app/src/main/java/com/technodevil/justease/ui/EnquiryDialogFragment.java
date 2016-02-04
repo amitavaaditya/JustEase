@@ -29,8 +29,6 @@ import com.technodevil.justease.R;
 import com.technodevil.justease.service.ServerIntentService;
 import com.technodevil.justease.util.Constants;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
 
@@ -42,11 +40,7 @@ public class EnquiryDialogFragment extends DialogFragment {
     public static final String TAG = "EnquiryDialogFragment";
 
     //List items
-    String[] items ={
-            "---Please select an enquiry channel---",
-            "Civil",
-            "Criminal"
-    };
+    String[] items;
 
     private TextInputLayout enquiryTitleTextLayout;
     private TextInputLayout enquiryTextLayout;
@@ -66,6 +60,7 @@ public class EnquiryDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if(Constants.D) Log.d(TAG,"onCreate()");
         setRetainInstance(true);
+        items = getResources().getStringArray(R.array.channels);
     }
 
     @Override
@@ -90,8 +85,8 @@ public class EnquiryDialogFragment extends DialogFragment {
         if(Constants.D) Log.d(TAG, "onViewCreated()");
 
         Spinner channelSpinner = (Spinner) view.findViewById(R.id.channelSpinner);
-        channelSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item,
-                new ArrayList<>(Arrays.asList(items))));
+        channelSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(),
+                        R.array.channels, R.layout.spinner_text));
         channelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -176,12 +171,15 @@ public class EnquiryDialogFragment extends DialogFragment {
             bundle.putString(Constants.ENQUIRY_TITLE, title);
             bundle.putString(Constants.ENQUIRY, enquiry);
             Calendar calendar = Calendar.getInstance();
-            enquiryDateTime = calendar.get(Calendar.DAY_OF_MONTH)
-                    + "-" + (1 + calendar.get(Calendar.MONTH))
-                    + "-" + calendar.get(Calendar.YEAR)
-                    + "   " + calendar.get(Calendar.HOUR)
-                    + ":" + calendar.get(Calendar.MINUTE)
-                    + " " + ((calendar.get(Calendar.AM_PM) == 0) ? "AM" : "PM");
+            enquiryDateTime = String.format("%d-%d-%d%3s%02d:%02d%s%s",
+                    calendar.get(Calendar.DAY_OF_MONTH),
+                    (1 + calendar.get(Calendar.MONTH)),
+                    calendar.get(Calendar.YEAR),
+                    " ",
+                    calendar.get(Calendar.HOUR) == 0 ? 12 : calendar.get(Calendar.HOUR),
+                    calendar.get(Calendar.MINUTE),
+                    " ",
+                    (calendar.get(Calendar.AM_PM) == 0) ? "AM" : "PM");
             bundle.putString(Constants.ENQUIRY_DATE_TIME, enquiryDateTime);
             String username = PreferenceManager.getDefaultSharedPreferences(getActivity())
                     .getString(Constants.USERNAME,"");

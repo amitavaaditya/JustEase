@@ -33,7 +33,7 @@ import com.technodevil.justease.util.OnFragmentChangedListener;
 public class RegisterFragment extends Fragment {
     //Debugging
     public static final String TAG = "RegisterFragment";
-    private static final boolean D = true;
+
     //UI elements
     private TextInputLayout firstNameLayout;
     private TextInputLayout lastNameLayout;

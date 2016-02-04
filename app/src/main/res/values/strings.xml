@@ -14,13 +14,19 @@
     <string name="login_field_blank">Field cannot be blank</string>
     <string name="login_failure">Failed to login. Please try again.</string>
     <string name="invalid_login_credentials">Invalid login credentials</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="request_password">Request password</string>
+    <string name="password_sent">Password sent to </string>
+    <string name="username_not_exists">Username does not exist</string>
+    <string name="enter_username">Forgot Password</string>
+    <string name="request_password_failure">Failed to request password. Please try again.</string>
 
     <!--RegisterFragment-->
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="contact_number">Mobile Number</string>
     <string name="email_id">Email ID</string>
-    <string name="set_password">Password (Atleast 8 characters)</string>
+    <string name="set_password">Password (8-15 characters)</string>
     <string name="set_password_again">Re-enter Password</string>
     <string name="action_sign_up">Sign up</string>
     <string name="password_error">Length must be atleast 8 characters</string>
@@ -108,4 +114,18 @@
     <string name="my_enquiries">My Enquiries</string>
     <string name="enquiries">Enquiries</string>
     <string name="my_cases">My Cases</string>
+
+    <!--Enquiry Channels-->
+    <string-array name="channels">
+        <item>---Please select an enquiry channel---</item>
+        <item>Women</item>
+        <item>Traffic</item>
+        <item>Banking</item>
+        <item>Insurance</item>
+        <item>Taxation</item>
+        <item>Crime</item>
+        <item>Industry</item>
+        <item>Others</item>
+    </string-array>
+
 </resources>

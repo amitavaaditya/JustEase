@@ -25,8 +25,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.technodevil.justease.util.Constants;
 import com.technodevil.justease.R;
+import com.technodevil.justease.util.Constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,6 +46,11 @@ public class ServerIntentService extends IntentService {
 
     SharedPreferences sharedPreferences;
 
+    /**
+     * Handle the intent type
+     *
+     * @param intent Intent containing request type
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -55,6 +60,9 @@ public class ServerIntentService extends IntentService {
         switch (action) {
             case Constants.ACTION_LOGIN:
                 login(data);
+                break;
+            case Constants.ACTION_FORGOT_PASSWORD:
+                forgotPassword(data);
                 break;
             case Constants.ACTION_REGISTER:
                 register(data);
@@ -86,10 +94,14 @@ public class ServerIntentService extends IntentService {
         }
     }
 
+    /**
+     * Login with the entered details
+     *
+     * @param data Bundle containing data
+     */
     private void login(Bundle data) {
         if (Constants.D) Log.d(TAG, "login()");
         String serverURL = Constants.SERVER_ADDRESS + "login.php";
-        if (Constants.D) Log.i(TAG, "login():" + serverURL);
         String token = registerGCM();
         if(token != null) {
             sharedPreferences.edit().putString(Constants.REGISTRATION_KEY, token).apply();
@@ -98,6 +110,27 @@ public class ServerIntentService extends IntentService {
         }
     }
 
+    /**
+     * Request to mail password to registered username
+     *
+     * @param data Bundle containing data
+     */
+    private void forgotPassword(Bundle data) {
+        if (Constants.D) Log.d(TAG, "forgotPassword()");
+        String serverURL = Constants.SERVER_ADDRESS + "forgotpassword.php";
+        String token = registerGCM();
+        if(token != null) {
+            sharedPreferences.edit().putString(Constants.REGISTRATION_KEY, token).apply();
+            data.putString(Constants.REGISTRATION_KEY, token);
+            sendToServer(serverURL, data);
+        }
+    }
+
+    /**
+     * Register with the entered details
+     *
+     * @param data Bundle containing data
+     */
     private void register(Bundle data) {
         if (Constants.D) Log.d(TAG, "register():");
         String serverURL = Constants.SERVER_ADDRESS + "register.php";
@@ -109,16 +142,24 @@ public class ServerIntentService extends IntentService {
         }
     }
 
+    /**
+     * Update with entered details
+     *
+     * @param data Bundle containing data
+     */
     private void update(Bundle data) {
         if (Constants.D) Log.d(TAG, "update():");
         String serverURL = Constants.SERVER_ADDRESS + "update.php";
-        String token = sharedPreferences.getString(Constants.REGISTRATION_KEY,null);
+        String token = sharedPreferences.getString(Constants.REGISTRATION_KEY, null);
         if(token != null) {
             data.putString(Constants.REGISTRATION_KEY, token);
             sendToServer(serverURL, data);
         }
     }
 
+    /**
+     * Called by MyInstanceIDListenerService to update GCM token
+     */
     private void updateToken() {
         if (Constants.D) Log.d(TAG, "updateToken()");
         String token = registerGCM();
@@ -132,16 +173,26 @@ public class ServerIntentService extends IntentService {
         }
     }
 
+    /**
+     * Send message with entered data
+     *
+     * @param data Bundle containing data
+     */
     private void sendMessage(Bundle data) {
         if (Constants.D) Log.d(TAG, "sendMessage():");
         String serverURL = Constants.SERVER_ADDRESS + "sendmessage.php";
-        String token = sharedPreferences.getString(Constants.REGISTRATION_KEY,null);
+        String token = sharedPreferences.getString(Constants.REGISTRATION_KEY, null);
         if(token != null) {
             data.putString(Constants.REGISTRATION_KEY, token);
             sendToServer(serverURL, data);
         }
     }
 
+    /**
+     * Update to new entered password
+     *
+     * @param data Bundle containing data
+     */
     private void updatePassword(Bundle data) {
         if (Constants.D) Log.d(TAG, "updatePassword():");
         String serverURL = Constants.SERVER_ADDRESS + "updatepassword.php";
@@ -153,6 +204,11 @@ public class ServerIntentService extends IntentService {
 
     }
 
+    /**
+     * Submit new enquiry with entered data
+     *
+     * @param data Bundle containing data
+     */
     private void submitEnquiry(Bundle data) {
         if (Constants.D) Log.d(TAG, "submitEnquiry():" + data);
         String serverURL = Constants.SERVER_ADDRESS + "enquiry.php";
@@ -163,6 +219,11 @@ public class ServerIntentService extends IntentService {
         }
     }
 
+    /**
+     * Resend enquiry for entered data
+     *
+     * @param data Bundle containing data
+     */
     private void resendEnquiry(Bundle data) {
         if (Constants.D) Log.d(TAG, "resendEnquiry():" + data);
         String serverURL = Constants.SERVER_ADDRESS + "resendenquiry.php";
@@ -173,6 +234,11 @@ public class ServerIntentService extends IntentService {
         }
     }
 
+    /**
+     * Accept enquiry for selected enquiryID
+     *
+     * @param data Bundle containing data
+     */
     private void acceptEnquiry(Bundle data) {
         if (Constants.D) Log.d(TAG, "acceptEnquiry():" + data);
         String serverURL = Constants.SERVER_ADDRESS + "acceptenquiry.php";
@@ -193,7 +259,11 @@ public class ServerIntentService extends IntentService {
         }
     }
 
-    //Obtain GCM token
+    /**
+     * Register for a new GCM registration ID
+     *
+     * @return new registration ID, null if failed
+     */
     private String registerGCM() {
         try {
             InstanceID instanceID = InstanceID.getInstance(this);
@@ -208,6 +278,12 @@ public class ServerIntentService extends IntentService {
         return null;
     }
 
+    /**
+     * Send data to server
+     *
+     * @param serverURL URL of the server
+     * @param data Bundle containing all key-value data
+     */
     private void sendToServer(String serverURL, Bundle data) {
         String postData = "";
         for(String key : data.keySet()) {

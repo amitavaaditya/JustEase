@@ -194,8 +194,8 @@ public class EnquiriesFragment extends ListFragment {
     }
 
     class EnquiryInfoDialog extends Dialog {
-        public EnquiryInfoDialog(Context getActivity) {
-            super(getActivity);
+        public EnquiryInfoDialog(Context context) {
+            super(context);
         }
         public void createDialog() {
             requestWindowFeature(Window.FEATURE_NO_TITLE);

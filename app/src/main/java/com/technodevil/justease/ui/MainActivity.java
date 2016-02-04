@@ -16,9 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -156,40 +154,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.setChecked(false);
         drawerLayout.closeDrawers();
         switch (item.getItemId()) {
-            case R.id.change_wait_time:
-                final EditText waitTimeEditText = new EditText(this);
-                waitTimeEditText.setText(String.format("%d", Constants.BACKOFF_TIME));
-                new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.wait_time_changed))
-                        .setView(waitTimeEditText)
-                        .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    Constants.BACKOFF_TIME = Integer.parseInt(waitTimeEditText.getText().toString());
-                                } catch (Exception e) {
-                                    if (Constants.D) Log.e(TAG, e.toString());
-                                }
-                                Toast.makeText(getApplicationContext(), getString(R.string.wait_time_changed), Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                        }).show();
-                return true;
-            case R.id.change_server_url:
-                final EditText serverEditText = new EditText(this);
-                serverEditText.setText(Constants.SERVER_ADDRESS);
-                new AlertDialog.Builder(this)
-                        .setMessage(R.string.change_server_url)
-                        .setView(serverEditText)
-                        .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Constants.SERVER_ADDRESS = serverEditText.getText().toString();
-                                Toast.makeText(getApplicationContext(), getString(R.string.url_changed), Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                        }).show();
-                return true;
             case R.id.about_us:
                 new AlertDialog.Builder(this)
                         .setIcon(R.drawable.logo)

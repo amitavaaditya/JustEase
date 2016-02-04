@@ -29,8 +29,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -53,7 +53,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<Integer> messageIDs;
 
     private EditText messageEditText;
-    private Button sendButton;
+    private ImageButton sendButton;
     private ProgressBar messageProgressBar;
 
     DrawerLayout drawerLayout;
@@ -69,7 +69,8 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolBar));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(Constants.NOTIFICATION_ID, 0).apply();
 
         final ActionBar actionBar = getSupportActionBar();
@@ -79,7 +80,9 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -88,7 +91,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         enquiryID = intent.getStringExtra(Constants.MESSAGE_ENQUIRY_ID);
 
         messageEditText = (EditText) findViewById(R.id.messageEditText);
-        sendButton = (Button) findViewById(R.id.sendButton);
+        sendButton = (ImageButton) findViewById(R.id.sendButton);
         messageProgressBar = (ProgressBar) findViewById(R.id.messageProgressBar);
         ListView list = (ListView) findViewById(R.id.list);
 
@@ -111,8 +114,8 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
                 Constants.ENQUIRY_ID + "=?", new String[]{enquiryID}, null);
         assert cursor != null;
         cursor.moveToFirst();
-        if(actionBar != null)
-            actionBar.setSubtitle("Enquiry: " + cursor.getString(cursor.getColumnIndex(Constants.ENQUIRY_TITLE)));
+        TextView toolbarSubtitleView = (TextView) toolbar.findViewById(R.id.toolbarSubtitleView);
+        toolbarSubtitleView.setText(String.format("Title : %s" , cursor.getString(cursor.getColumnIndex(Constants.ENQUIRY_TITLE))));
         cursor.close();
 
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -355,40 +358,6 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.my_profile:
                 startActivity(new Intent(this, ProfileActivity.class));
-                return true;
-            case R.id.change_wait_time:
-                final EditText waitTimeEditText = new EditText(this);
-                waitTimeEditText.setText(String.format("%d", Constants.BACKOFF_TIME));
-                new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.wait_time_changed))
-                        .setView(waitTimeEditText)
-                        .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    Constants.BACKOFF_TIME = Integer.parseInt(waitTimeEditText.getText().toString());
-                                } catch (Exception e) {
-                                    if (Constants.D) Log.e(TAG, e.toString());
-                                }
-                                Toast.makeText(getApplicationContext(), getString(R.string.wait_time_changed), Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                        }).show();
-                return true;
-            case R.id.change_server_url:
-                final EditText serverEditText = new EditText(this);
-                serverEditText.setText(Constants.SERVER_ADDRESS);
-                new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.change_server_url))
-                        .setView(serverEditText)
-                        .setPositiveButton(Constants.CONFIRM, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Constants.SERVER_ADDRESS = serverEditText.getText().toString();
-                                Toast.makeText(getApplicationContext(), getString(R.string.url_changed), Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                        }).show();
                 return true;
             case R.id.about_us:
                 new AlertDialog.Builder(ChatActivity.this)
